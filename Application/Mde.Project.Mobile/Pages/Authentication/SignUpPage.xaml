@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.Authentication.SignUpPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:vm="clr-namespace:Mde.Project.Mobile.ViewModels.Authentication"
+    x:DataType="vm:SignUpViewModel"
+    NavigationPage.HasNavigationBar="False">
+    <Grid>
+        <Image
+            Aspect="AspectFill"
+            Scale="1"
+            Source="subtle_prism.png" />
+        <ScrollView>
+            <Grid MaximumWidthRequest="600" RowDefinitions="300, *">
+                <Grid
+                    Grid.Row="0"
+                    HorizontalOptions="Center"
+                    RowDefinitions=".6*, Auto"
+                    VerticalOptions="Center">
+                    <Image
+                        Margin="15,0,0,0"
+                        HorizontalOptions="Center"
+                        MaximumHeightRequest="{OnPlatform Android=150,
+                                                          WinUI=200}"
+                        Source="logo_stock.png" />
+                    <Label
+                        Grid.Row="2"
+                        Margin="0,-10,0,20"
+                        FontAttributes="Bold"
+                        FontFamily="bold"
+                        FontSize="25"
+                        HorizontalOptions="Center"
+                        Text="Stock Flow"
+                        TextColor="{StaticResource Gray200}" />
+                </Grid>
+                <Grid Grid.Row="1" StyleClass="Elevation3">
+                    <RoundRectangle
+                        Margin="-5,-30,-5,-2"
+                        CornerRadius="30,30,0,0"
+                        Fill="{AppThemeBinding Light={StaticResource LightBackground},
+                                               Dark={StaticResource Jet}}" />
+                    <VerticalStackLayout Margin="30,0,30,30">
+                        <Label
+                            FontAttributes="Bold"
+                            FontFamily="bold"
+                            FontSize="20"
+                            Text="Create your account"
+                            TextColor="{AppThemeBinding Light={StaticResource Jet},
+                                                        Dark={StaticResource GhostWhite}}" />
+                        <HorizontalStackLayout Spacing="5">
+                            <Label
+                                FontSize="14"
+                                Text="Already have an account? "
+                                TextColor="{AppThemeBinding Light={StaticResource Jet},
+                                                            Dark={StaticResource GhostWhite}}" />
+                            <Label
+                                FontAttributes="Bold"
+                                FontFamily="bold"
+                                FontSize="14"
+                                Text="Sign in"
+                                TextColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                            Dark={StaticResource BlueMunself}}"
+                                VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SignInNavigationCommand}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+                        <input:FormView SubmitCommand="{Binding SignUpCommand}">
+                            <VerticalStackLayout Margin="0,20,0,20" Spacing="10">
+                                <material:TextField
+                                    Title="First Name"
+                                    AccentColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                                  Dark={StaticResource BlueMunself}}"
+                                    Icon="{FontImageSource FontFamily=FASolid,
+                                                           Glyph={x:Static fa:Solid.User}}"
+                                    Text="{Binding FirstName}">
+                                    <validation:RequiredValidation />
+                                    <validation:LettersOnlyValidation AllowSpaces="False" />
+                                    <validation:MinLengthValidation Message="Requires a minimum length of 3" MinLength="3" />
+                                </material:TextField>
+                                <material:TextField
+                                    Title="Last Name"
+                                    AccentColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                                  Dark={StaticResource BlueMunself}}"
+                                    Icon="{FontImageSource FontFamily=FASolid,
+                                                           Glyph={x:Static fa:Solid.User}}"
+                                    Text="{Binding LastName}">
+                                    <validation:RequiredValidation />
+                                    <validation:LettersOnlyValidation AllowSpaces="True" />
+                                    <validation:MinLengthValidation Message="Requires a minimum length of 3" MinLength="3" />
+                                </material:TextField>
+                                <material:TextField
+                                    Title="E-mail"
+                                    AccentColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                                  Dark={StaticResource BlueMunself}}"
+                                    Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                           Glyph={x:Static m:MaterialRegular.Email}}"
+                                    Text="{Binding Email}">
+                                    <validation:RequiredValidation />
+                                    <validation:RegexValidation Message="Please type a valid e-mail address." Pattern="{x:Static input:AdvancedEntry.REGEX_EMAIL}" />
+                                </material:TextField>
+                                <material:TextField
+                                    Title="Password"
+                                    AccentColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                                  Dark={StaticResource BlueMunself}}"
+                                    Icon="{FontImageSource FontFamily=FASolid,
+                                                           Glyph={x:Static fa:Solid.Lock}}"
+                                    IsPassword="True"
+                                    Text="{Binding Password}">
+                                    <validation:RequiredValidation />
+                                    <validation:MinLengthValidation Message="Requires a minimum length of 5" MinLength="5" />
+                                </material:TextField>
+                                <material:TextField
+                                    Title="Repeat Password"
+                                    AccentColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                                  Dark={StaticResource BlueMunself}}"
+                                    Icon="{FontImageSource FontFamily=FASolid,
+                                                           Glyph={x:Static fa:Solid.Lock}}"
+                                    IsPassword="True"
+                                    Text="{Binding RepeatPassword}">
+                                    <validation:RequiredValidation />
+                                    <validation:MinLengthValidation Message="Requires a minimum length of 5" MinLength="5" />
+                                </material:TextField>
+                            </VerticalStackLayout>
+                            <ActivityIndicator
+                                HorizontalOptions="Center"
+                                IsRunning="{Binding CanSignUp, Converter={toolkit:InvertedBoolConverter}}"
+                                IsVisible="{Binding CanSignUp, Converter={toolkit:InvertedBoolConverter}}"
+                                VerticalOptions="Center" />
+                            <Button
+                                Margin="0,20,0,0"
+                                input:FormView.IsSubmitButton="True"
+                                BackgroundColor="{StaticResource Charcoal}"
+                                IsEnabled="{Binding CanSignUp}"
+                                StyleClass="FilledButton"
+                                Text="Sign Up"
+                                TextColor="{StaticResource GhostWhite}" />
+                        </input:FormView>
+                    </VerticalStackLayout>
+                </Grid>
+            </Grid>
+        </ScrollView>
+    </Grid>
+</base:SfContentPage>

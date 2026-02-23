@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Products.BrandsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:controls="clr-namespace:Mde.Project.Mobile.Controls"
+    xmlns:converters="clr-namespace:Mde.Project.Mobile.Converters"
+    xmlns:m="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:products="clr-namespace:Mde.Project.Mobile.Models.Products"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:Mde.Project.Mobile.ViewModels.App.Products"
+    Title="Brands"
+    x:DataType="vm:BrandsViewModel">
+    <base:SfContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding InitializeBrandsCommand}" EventName="Appearing" />
+    </base:SfContentPage.Behaviors>
+    <base:SfContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding ProfileNavigationCommand}"
+            Order="Primary"
+            Priority="1">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Account_circle}"
+                    Color="{AppThemeBinding Light={StaticResource Charcoal},
+                                            Dark={StaticResource Warehouse}}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <controls:SfToolBarItem
+            Command="{Binding HomeNavigationCommand}"
+            IsVisible="{Binding IsAdmin}"
+            Order="Primary"
+            Priority="0">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Home}"
+                    Color="{AppThemeBinding Light={StaticResource Charcoal},
+                                            Dark={StaticResource Warehouse}}" />
+            </ToolbarItem.IconImageSource>
+        </controls:SfToolBarItem>
+    </base:SfContentPage.ToolbarItems>
+    <Grid RowDefinitions="Auto, *, Auto">
+        <VerticalStackLayout Grid.Row="0" MaximumWidthRequest="900">
+            <Grid Margin="0,20,0,20">
+                <Border
+                    Margin="20,0,20,0"
+                    Padding="0"
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                      Light={StaticResource LightBackground}}"
+                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                             Light={StaticResource Gray100}}"
+                    StrokeShape="RoundRectangle 10">
+                    <SearchBar
+                        HorizontalOptions="Fill"
+                        Placeholder="Search brand"
+                        SearchCommand="{Binding InitializeBrandsCommand}"
+                        Text="{Binding Filter}"
+                        TextChanged="SearchBar_TextChanged"
+                        VerticalOptions="Center" />
+                </Border>
+            </Grid>
+            <BoxView Margin="20,0,20,0" StyleClass="Divider" />
+            <Grid
+                Margin="20,10,20,10"
+                ColumnDefinitions="*, Auto"
+                MaximumWidthRequest="900">
+                <HorizontalStackLayout Grid.Column="0" Spacing="5">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="20"
+                        HorizontalOptions="Start"
+                        Text="Brand List"
+                        TextColor="{StaticResource Gray300}"
+                        VerticalOptions="Center" />
+                    <Border
+                        Padding="5,0,5,0"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource LightJet},
+                                                          Light={StaticResource Gray200}}"
+                        HorizontalOptions="Center"
+                        IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"
+                        Stroke="{AppThemeBinding Dark={StaticResource Jet},
+                                                 Light={StaticResource Gray300}}"
+                        StrokeShape="RoundRectangle 10"
+                        VerticalOptions="Center">
+                        <Label
+                            FontSize="18"
+                            HorizontalOptions="Center"
+                            Text="{Binding TotalItems}"
+                            TextColor="{AppThemeBinding Dark={StaticResource Gray300},
+                                                        Light={StaticResource GhostWhite}}"
+                            VerticalOptions="Center" />
+                    </Border>
+                </HorizontalStackLayout>
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center">
+                    <material:ButtonView
+                        BackgroundColor="{StaticResource YellowGreen}"
+                        PressedCommand="{Binding BrandAddNavigationCommand}"
+                        StrokeShape="RoundRectangle 10">
+                        <Image HeightRequest="20" WidthRequest="20">
+                            <Image.Source>
+                                <FontImageSource
+                                    FontFamily="MaterialRegular"
+                                    Glyph="{x:Static m:MaterialRegular.Add}"
+                                    Color="{StaticResource GhostWhite}" />
+                            </Image.Source>
+                        </Image>
+                    </material:ButtonView>
+                </VerticalStackLayout>
+            </Grid>
+        </VerticalStackLayout>
+        <ActivityIndicator
+            Grid.Row="1"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center" />
+        <Label
+            Grid.Row="1"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+            <Label.Text>
+                <MultiBinding Converter="{converters:BoolAndIntToStringConverter}">
+                    <Binding Path="IsBusy" />
+                    <Binding Path="Brands.Count" />
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+        <CollectionView
+            Grid.Row="1"
+            Margin="20,0,20,10"
+            IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"
+            ItemsSource="{Binding Brands}"
+            VerticalOptions="Fill">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="products:BrandDisplayModel">
+                    <Border
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                          Light={StaticResource LightBackground}}"
+                        MaximumWidthRequest="860"
+                        Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                 Light={StaticResource Gray100}}"
+                        StrokeShape="RoundRectangle 10"
+                        StrokeThickness="1">
+                        <Grid
+                            Padding="10,10,10,10"
+                            ColumnDefinitions="*, 0.3*"
+                            HeightRequest="70">
+                            <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                <Label
+                                    FontSize="14"
+                                    Text="{Binding Name}"
+                                    TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                Light={StaticResource Jet}}" />
+                                <Border
+                                    Padding="8,2"
+                                    BackgroundColor="{StaticResource FernGreen}"
+                                    HorizontalOptions="Start"
+                                    Stroke="{StaticResource FernGreen}"
+                                    StrokeShape="RoundRectangle 12">
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Image HeightRequest="14" WidthRequest="14">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.All_inbox}"
+                                                    Color="White" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontSize="14"
+                                            Text="{Binding TotalProducts, Converter={converters:ProductCountToStringConverter}}"
+                                            TextColor="White"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout
+                                Grid.Column="2"
+                                Margin="0,0,10,0"
+                                HorizontalOptions="End"
+                                VerticalOptions="Center">
+                                <material:ButtonView
+                                    BackgroundColor="{StaticResource Charcoal}"
+                                    CommandParameter="{Binding Id}"
+                                    PressedCommand="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.BrandDetailNavigationCommand}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <Image HeightRequest="20" WidthRequest="20">
+                                        <Image.Source>
+                                            <FontImageSource
+                                                FontFamily="MaterialRegular"
+                                                Glyph="{x:Static m:MaterialRegular.Chevron_right}"
+                                                Color="{StaticResource GhostWhite}" />
+                                        </Image.Source>
+                                    </Image>
+                                </material:ButtonView>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <material:Paginator
+            Grid.Row="2"
+            Margin="0,0,0,10"
+            ChangePageCommand="{Binding ChangeBrandPageCommand}"
+            CurrentPage="{Binding CurrentPage}"
+            HorizontalOptions="Center"
+            TotalPageCount="{Binding TotalPages}" />
+    </Grid>
+</base:SfContentPage>

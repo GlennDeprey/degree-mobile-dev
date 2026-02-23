@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Reports.ReportsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:controls="clr-namespace:Mde.Project.Mobile.Controls"
+    xmlns:converters="clr-namespace:Mde.Project.Mobile.Converters"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:report="clr-namespace:Mde.Project.Mobile.Models.Reports"
+    xmlns:reports="clr-namespace:Mde.Project.Mobile.ViewModels.App.Reports"
+    xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="Reports"
+    x:DataType="reports:ReportsViewModel">
+    <base:SfContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding InitializeReportsCommand}" EventName="Appearing" />
+    </base:SfContentPage.Behaviors>
+    <base:SfContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding ProfileNavigationCommand}"
+            Order="Primary"
+            Priority="1">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Account_circle}"
+                    Color="{AppThemeBinding Light={StaticResource Charcoal},
+                                            Dark={StaticResource Warehouse}}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <controls:SfToolBarItem
+            Command="{Binding HomeNavigationCommand}"
+            IsVisible="{Binding IsAdmin}"
+            Order="Primary"
+            Priority="0">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Home}"
+                    Color="{AppThemeBinding Light={StaticResource Charcoal},
+                                            Dark={StaticResource Warehouse}}" />
+            </ToolbarItem.IconImageSource>
+        </controls:SfToolBarItem>
+    </base:SfContentPage.ToolbarItems>
+    <ScrollView>
+        <VerticalStackLayout Padding="10">
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center" />
+            <Grid
+                Margin="5,5,5,5"
+                IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"
+                MaximumWidthRequest="900"
+                RowDefinitions="200, *, Auto">
+                <Grid
+                    Grid.Row="0"
+                    Margin="0,0,0,30"
+                    HeightRequest="200"
+                    WidthRequest="200">
+                    <skia:SKLottieView
+                        Margin="0,10,0,0"
+                        HeightRequest="150"
+                        IsVisible="True"
+                        RepeatCount="-1"
+                        Scale="1"
+                        Source="dashboard_reports.json" />
+                </Grid>
+                <Grid Grid.Row="1" Margin="0,0,0,50">
+                    <VerticalStackLayout Margin="20,0,20,0" Spacing="20">
+                        <material:PickerField
+                            Title="Select a warehouse"
+                            AccentColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                          Dark={StaticResource BlueMunself}}"
+                            AllowClear="False"
+                            Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                   Glyph={x:Static m:MaterialRegular.Warehouse}}"
+                            ItemDisplayBinding="{Binding Name}"
+                            ItemsSource="{Binding Warehouses}"
+                            SelectedItem="{Binding SelectedWarehouse}"
+                            SelectedValueChangedCommand="{Binding WarehouseChangedCommand}"
+                            VerticalOptions="Center" />
+                        <BoxView Margin="0" StyleClass="Divider" />
+                        <HorizontalStackLayout Grid.Column="0" Spacing="5">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="20"
+                                HorizontalOptions="Start"
+                                Text="Reports List"
+                                TextColor="{StaticResource Gray300}"
+                                VerticalOptions="Center" />
+                            <Border
+                                Padding="5,0,5,0"
+                                BackgroundColor="{AppThemeBinding Dark={StaticResource LightJet},
+                                                                  Light={StaticResource Gray200}}"
+                                HorizontalOptions="Center"
+                                IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"
+                                Stroke="{AppThemeBinding Dark={StaticResource Jet},
+                                                         Light={StaticResource Gray300}}"
+                                StrokeShape="RoundRectangle 10"
+                                VerticalOptions="Center">
+                                <Label
+                                    FontSize="18"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding TotalItems}"
+                                    TextColor="{AppThemeBinding Dark={StaticResource Gray300},
+                                                                Light={StaticResource GhostWhite}}"
+                                    VerticalOptions="Center" />
+                            </Border>
+                        </HorizontalStackLayout>
+                        <Label
+                            Grid.Row="1"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center">
+                            <Label.Text>
+                                <MultiBinding Converter="{converters:BoolAndIntToStringConverter}">
+                                    <Binding Path="IsBusy" />
+                                    <Binding Path="WarehouseReports.Count" />
+                                </MultiBinding>
+                            </Label.Text>
+                        </Label>
+                        <CollectionView
+                            Grid.Row="1"
+                            Margin="0,0,0,10"
+                            IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"
+                            ItemsSource="{Binding WarehouseReports}"
+                            VerticalOptions="Fill">
+                            <CollectionView.ItemsLayout>
+                                <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
+                            </CollectionView.ItemsLayout>
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="report:ReportModel">
+                                    <Border
+                                        Padding="10"
+                                        BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                          Light={StaticResource LightBackground}}"
+                                        MaximumWidthRequest="880"
+                                        Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                                 Light={StaticResource Gray100}}"
+                                        StrokeShape="RoundRectangle 10"
+                                        StrokeThickness="1">
+                                        <VerticalStackLayout Spacing="6">
+                                            <Grid ColumnDefinitions="*, Auto" VerticalOptions="Center">
+                                                <Border
+                                                    Padding="8,2"
+                                                    BackgroundColor="{StaticResource FernGreen}"
+                                                    HorizontalOptions="Start"
+                                                    Stroke="{StaticResource FernGreen}"
+                                                    StrokeShape="RoundRectangle 12">
+                                                    <HorizontalStackLayout Spacing="4">
+                                                        <Image HeightRequest="14" WidthRequest="14">
+                                                            <Image.Source>
+                                                                <FontImageSource
+                                                                    FontFamily="MaterialRegular"
+                                                                    Glyph="{x:Static m:MaterialRegular.Report}"
+                                                                    Color="White" />
+                                                            </Image.Source>
+                                                        </Image>
+                                                        <Label
+                                                            FontSize="14"
+                                                            Text="{Binding Tag}"
+                                                            TextColor="White"
+                                                            VerticalOptions="Center" />
+                                                    </HorizontalStackLayout>
+                                                </Border>
+
+                                                <HorizontalStackLayout
+                                                    Grid.Column="1"
+                                                    Spacing="5"
+                                                    VerticalOptions="Center">
+                                                    <Image
+                                                        Aspect="AspectFit"
+                                                        HeightRequest="20"
+                                                        Source="{FontImageSource FontFamily=MaterialRegular,
+                                                                                 Glyph={x:Static m:MaterialRegular.Access_time}}"
+                                                        WidthRequest="20" />
+                                                    <Label
+                                                        FontSize="14"
+                                                        Text="{Binding CreatedOn, Converter={converters:TimeAgoConverter}}"
+                                                        TextColor="{StaticResource Gray300}"
+                                                        VerticalOptions="Center" />
+                                                </HorizontalStackLayout>
+                                            </Grid>
+
+                                            <BoxView BackgroundColor="{AppThemeBinding Dark={StaticResource LightJet}, Light={StaticResource Gray100}}" HeightRequest="1" />
+
+                                            <HorizontalStackLayout Spacing="5" VerticalOptions="Center">
+                                                <Image
+                                                    Aspect="AspectFit"
+                                                    HeightRequest="20"
+                                                    Source="{Binding QuantityChange, Converter={converters:QuantityChangeToIconConverter}}"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="20" />
+                                                <Label
+                                                    FontSize="14"
+                                                    HorizontalOptions="StartAndExpand"
+                                                    Text="{Binding Description}"
+                                                    TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                                Light={StaticResource Jet}}"
+                                                    VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
+
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Grid>
+                <material:Paginator
+                    Grid.Row="2"
+                    Margin="0,0,0,10"
+                    ChangePageCommand="{Binding ChangeReportPageCommand}"
+                    CurrentPage="{Binding CurrentPage}"
+                    HorizontalOptions="Center"
+                    TotalPageCount="{Binding TotalPages}" />
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</base:SfContentPage>

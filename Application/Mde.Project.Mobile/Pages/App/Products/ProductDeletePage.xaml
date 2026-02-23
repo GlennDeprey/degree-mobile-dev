@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Products.ProductDeletePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:m="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:Mde.Project.Mobile.ViewModels.App.Products"
+    Title="Remove a Product"
+    x:DataType="vm:ProductDeleteViewModel">
+    <ScrollView>
+        <VerticalStackLayout>
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center" />
+            <Grid IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}" RowDefinitions="150,*">
+                <Grid RowDefinitions="0">
+                    <VerticalStackLayout>
+                        <Border
+                            Margin="20,20,20,20"
+                            BackgroundColor="{StaticResource GhostWhite}"
+                            HeightRequest="100"
+                            HorizontalOptions="Center"
+                            Stroke="{StaticResource Gray300}"
+                            StrokeShape="RoundRectangle 50"
+                            VerticalOptions="Start"
+                            WidthRequest="100">
+                            <Image
+                                Aspect="AspectFill"
+                                HeightRequest="100"
+                                Source="dotnet_bot.png"
+                                WidthRequest="100" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+                <Grid
+                    Grid.Row="1"
+                    Margin="0,0,0,50"
+                    MaximumWidthRequest="900">
+                    <VerticalStackLayout Spacing="10">
+                        <Border
+                            Margin="20,0,20,0"
+                            Padding="20"
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                              Light={StaticResource LightBackground}}"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 10"
+                            StyleClass="Elevation1">
+                            <VerticalStackLayout Spacing="10">
+                                <Image
+                                    HorizontalOptions="Center"
+                                    MaximumHeightRequest="50"
+                                    MaximumWidthRequest="100"
+                                    VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource
+                                            FontFamily="MaterialRegular"
+                                            Glyph="{x:Static m:MaterialRegular.Warning}"
+                                            Size="40"
+                                            Color="IndianRed" />
+                                    </Image.Source>
+                                </Image>
+                                <Label
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding Product.Name}"
+                                    TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                Light={StaticResource Jet}}" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center"
+                                    TextColor="{AppThemeBinding Dark={StaticResource Gray400},
+                                                                Light={StaticResource Charcoal}}"
+                                    VerticalOptions="Center">
+                                    After removing this product,
+                                </Label>
+                                <Label
+                                    Margin="0,-10,0,0"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center"
+                                    TextColor="{AppThemeBinding Dark={StaticResource Gray400},
+                                                                Light={StaticResource Charcoal}}"
+                                    VerticalOptions="Center">
+                                    you won't be able to scan it anymore.
+                                </Label>
+                                <Button
+                                    BackgroundColor="IndianRed"
+                                    Command="{Binding DeleteProductCommand}"
+                                    HorizontalOptions="Center"
+                                    Text="Delete"
+                                    TextColor="White" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</base:SfContentPage>

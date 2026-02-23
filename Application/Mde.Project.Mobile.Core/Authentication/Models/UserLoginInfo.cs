@@ -1,0 +1,15 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Mde.Project.Mobile.Core.Authentication.Models
+{
+    public class UserLoginInfo
+    {
+        public string LoginProvider { get; set; }
+        public string ProviderKey { get; set; }
+        public string ProviderDisplayName { get; set; }
+    }
+}

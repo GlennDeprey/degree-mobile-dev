@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Operations.StockOrderPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:controls="clr-namespace:Mde.Project.Mobile.Controls"
+    xmlns:converters="clr-namespace:Mde.Project.Mobile.Converters"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:products="clr-namespace:Mde.Project.Mobile.Models.Products"
+    xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:Mde.Project.Mobile.ViewModels.App.Operations"
+    Title="Stock Orders"
+    x:DataType="vm:StockOrderViewModel">
+    <base:SfContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding InitializeWarehousesCommand}" EventName="Appearing" />
+    </base:SfContentPage.Behaviors>
+    <base:SfContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding ProfileNavigationCommand}"
+            Order="Primary"
+            Priority="1">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Account_circle}"
+                    Color="{AppThemeBinding Light={StaticResource Charcoal},
+                                            Dark={StaticResource Warehouse}}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <controls:SfToolBarItem
+            Command="{Binding HomeNavigationCommand}"
+            IsVisible="{Binding IsAdmin}"
+            Order="Primary"
+            Priority="0">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Home}"
+                    Color="{AppThemeBinding Light={StaticResource Charcoal},
+                                            Dark={StaticResource Warehouse}}" />
+            </ToolbarItem.IconImageSource>
+        </controls:SfToolBarItem>
+    </base:SfContentPage.ToolbarItems>
+    <ScrollView>
+        <VerticalStackLayout Padding="10">
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center" />
+            <!--  Warehouse Selection  -->
+            <Grid
+                Margin="5,5,5,5"
+                IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"
+                MaximumWidthRequest="900"
+                RowDefinitions="150,*">
+                <Grid
+                    Grid.Row="0"
+                    Margin="0,0,0,30"
+                    HeightRequest="150"
+                    WidthRequest="150">
+                    <skia:SKLottieView
+                        Margin="0,10,0,0"
+                        HeightRequest="150"
+                        IsVisible="True"
+                        RepeatCount="-1"
+                        Scale="1"
+                        Source="operations_addorder.json" />
+                </Grid>
+                <Grid Grid.Row="1" Margin="0,0,0,50">
+                    <VerticalStackLayout>
+                        <input:FormView Spacing="20" SubmitCommand="{Binding UpsertProductToWarehouseCommand}">
+                            <material:PickerField
+                                Title="Select a warehouse"
+                                AccentColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                              Dark={StaticResource BlueMunself}}"
+                                AllowClear="False"
+                                Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                       Glyph={x:Static m:MaterialRegular.Warehouse}}"
+                                ItemDisplayBinding="{Binding Name}"
+                                ItemsSource="{Binding Warehouses}"
+                                SelectedItem="{Binding SelectedWarehouse}"
+                                VerticalOptions="Center" />
+
+                            <material:AutoCompleteTextField
+                                Title="Search a product..."
+                                AccentColor="{AppThemeBinding Dark={StaticResource BlueMunself},
+                                                              Light={StaticResource Cerulean}}"
+                                AllowClear="True"
+                                Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                       Glyph={x:Static m:MaterialRegular.Search}}"
+                                ItemsSource="{Binding FilteredProductsNames}"
+                                Text="{Binding SelectedProductName}"
+                                TextChanged="AutoCompleteTextField_OnTextChanged" />
+
+                            <!--  Quantity and Add Button  -->
+                            <material:TextField
+                                Title="Quantity"
+                                AccentColor="{AppThemeBinding Dark={StaticResource BlueMunself},
+                                                              Light={StaticResource Cerulean}}"
+                                Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                       Glyph={x:Static m:MaterialRegular.Add}}"
+                                Keyboard="Numeric"
+                                Text="{Binding QuantityToAdd, Mode=TwoWay}"
+                                VerticalOptions="Center" />
+
+                            <material:ButtonView
+                                input:FormView.IsSubmitButton="True"
+                                BackgroundColor="{StaticResource FernGreen}"
+                                StyleClass="FilledButton">
+                                <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                                    <Image
+                                        Aspect="AspectFit"
+                                        HeightRequest="20"
+                                        Source="{FontImageSource FontFamily=MaterialRegular,
+                                                                 Glyph={x:Static m:MaterialRegular.Add}}"
+                                        VerticalOptions="Center"
+                                        WidthRequest="20" />
+                                    <Label
+                                        FontAttributes="Bold"
+                                        Text="Add Product"
+                                        TextColor="GhostWhite"
+                                        VerticalOptions="Center" />
+                                </HorizontalStackLayout>
+                            </material:ButtonView>
+                        </input:FormView>
+                    </VerticalStackLayout>
+                </Grid>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</base:SfContentPage>

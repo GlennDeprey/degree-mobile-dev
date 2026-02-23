@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Scanner.SelectWarehousePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:controls="clr-namespace:Mde.Project.Mobile.Controls"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:scanner="clr-namespace:Mde.Project.Mobile.ViewModels.App.Scanner"
+    xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    Title="Select a warehouse"
+    x:DataType="scanner:SelectWarehouseViewModel">
+    <base:SfContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding InitializeWarehousesCommand}" EventName="Loaded" />
+    </base:SfContentPage.Behaviors>
+    <base:SfContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding ProfileNavigationCommand}"
+            Order="Primary"
+            Priority="1">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Account_circle}"
+                    Color="{AppThemeBinding Light={StaticResource Charcoal},
+                                            Dark={StaticResource Warehouse}}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <controls:SfToolBarItem
+            Command="{Binding HomeNavigationCommand}"
+            IsVisible="{Binding IsAdmin}"
+            Order="Primary"
+            Priority="0">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Home}"
+                    Color="{AppThemeBinding Light={StaticResource Charcoal},
+                                            Dark={StaticResource Warehouse}}" />
+            </ToolbarItem.IconImageSource>
+        </controls:SfToolBarItem>
+    </base:SfContentPage.ToolbarItems>
+    <base:SfContentPage.Content>
+        <AbsoluteLayout>
+            <Image
+                AbsoluteLayout.LayoutBounds="0,0,1,1"
+                AbsoluteLayout.LayoutFlags="All"
+                Aspect="AspectFill"
+                Source="subtle_prism.png" />
+            <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+                <Grid RowDefinitions="500, *">
+                    <Grid Grid.Row="0">
+                        <VerticalStackLayout Margin="20,20,20,40" MaximumWidthRequest="900">
+                            <skia:SKLottieView
+                                BackgroundColor="Transparent"
+                                HeightRequest="300"
+                                HorizontalOptions="Center"
+                                IsVisible="True"
+                                RepeatCount="-1"
+                                Source="select_warehouse.json"
+                                WidthRequest="300" />
+                            <Label
+                                Margin="0,0,0,5"
+                                FontAttributes="Bold"
+                                FontSize="24"
+                                HorizontalOptions="Center"
+                                Text="Welcome"
+                                TextColor="{StaticResource Gray300}"
+                                VerticalOptions="Center" />
+                            <Label
+                                Margin="0,0,0,20"
+                                FontSize="16"
+                                HorizontalOptions="Center"
+                                Text="{Binding User.FullName}"
+                                TextColor="{StaticResource Gray300}"
+                                VerticalOptions="Center" />
+                        </VerticalStackLayout>
+                    </Grid>
+                    <Grid
+                        Grid.Row="1"
+                        MaximumWidthRequest="900"
+                        StyleClass="Elevation1">
+                        <RoundRectangle CornerRadius="30,30,0,0" Fill="{AppThemeBinding Light={StaticResource Warehouse}, Dark={StaticResource Jet}}" />
+                        <VerticalStackLayout Padding="20">
+                            <ActivityIndicator
+                                HorizontalOptions="Center"
+                                IsRunning="{Binding InitializeWarehousesCommand.IsRunning}"
+                                IsVisible="{Binding InitializeWarehousesCommand.IsRunning}"
+                                VerticalOptions="Center" />
+                            <input:FormView IsVisible="{Binding InitializeWarehousesCommand.IsRunning, Converter={toolkit:InvertedBoolConverter}}" SubmitCommand="{Binding ScannerNavigationCommand}">
+                                <material:PickerField
+                                    Title="Select a warehouse"
+                                    AccentColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                                  Dark={StaticResource BlueMunself}}"
+                                    AllowClear="True"
+                                    Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                           Glyph={x:Static m:MaterialRegular.Expand_circle_down}}"
+                                    ItemDisplayBinding="{Binding Name}"
+                                    ItemsSource="{Binding Warehouses}"
+                                    SelectedItem="{Binding SelectedWarehouse}">
+                                    <validation:RequiredValidation />
+                                </material:PickerField>
+                                <Button
+                                    Margin="0,20,0,0"
+                                    input:FormView.IsSubmitButton="True"
+                                    BackgroundColor="{StaticResource Charcoal}"
+                                    StyleClass="FilledButton"
+                                    Text="Start Scanning"
+                                    TextColor="{StaticResource GhostWhite}" />
+                            </input:FormView>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Grid>
+            </ScrollView>
+        </AbsoluteLayout>
+    </base:SfContentPage.Content>
+</base:SfContentPage>

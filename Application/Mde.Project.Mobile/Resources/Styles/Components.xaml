@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<?xaml-comp compile="true" ?>
+<ResourceDictionary xmlns="http://schemas.microsoft.com/dotnet/2021/maui" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+    <Style x:Key="VerifyCodeEntryStyle" TargetType="Entry">
+        <Setter Property="MaxLength" Value="1" />
+        <Setter Property="Keyboard" Value="Numeric" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+        <Setter Property="FontSize" Value="Large" />
+        <Setter Property="Shadow">
+            <Setter.Value>
+                <Shadow
+                    Brush="{AppThemeBinding Light={StaticResource Gray300},
+                                            Dark={StaticResource Gray600}}"
+                    Opacity="0.5"
+                    Radius="4"
+                    Offset="0,2" />
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style
+        ApplyToDerivedTypes="True"
+        Class="ExpanderView.Header"
+        TargetType="Layout">
+        <Setter Property="BackgroundColor" Value="{StaticResource Charcoal}" />
+        <Setter Property="Padding" Value="10" />
+    </Style>
+
+    <Style Class="ExpanderView.Content" TargetType="ContentView">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Warehouse}, Dark={StaticResource OffBlack}}" />
+    </Style>
+
+    <Style Class="ExpanderView.Arrow" TargetType="Path">
+        <Setter Property="Fill" Value="GhostWhite" />
+    </Style>
+
+    <Style x:Key="TextButton" TargetType="Button">
+        <Setter Property="TextColor" Value="{StaticResource Cerulean}" />
+    </Style>
+
+</ResourceDictionary>

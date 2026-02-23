@@ -1,0 +1,6 @@
+@Mde.Project.Api_HostAddress = http://localhost:7041
+
+GET {{Mde.Project.Api_HostAddress}}/Products/
+Accept: application/json
+
+###

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Warehouses.WarehouseDeletePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:controls="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+    xmlns:m="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:Mde.Project.Mobile.ViewModels.App.Warehouses"
+    Title="Remove a warehouse"
+    x:DataType="vm:WarehouseDeleteViewModel">
+    <ScrollView>
+        <VerticalStackLayout>
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center" />
+            <Grid IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}" RowDefinitions="150,*">
+                <Grid Grid.Row="0">
+                    <VerticalStackLayout>
+                        <Border
+                            Margin="20,20,20,0"
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                              Light={StaticResource LightBackground}}"
+                            HeightRequest="100"
+                            HorizontalOptions="Center"
+                            Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                     Light={StaticResource Gray100}}"
+                            StrokeShape="RoundRectangle 50"
+                            VerticalOptions="Start"
+                            WidthRequest="100">
+                            <controls:SKLottieView
+                                Margin="0,10,0,0"
+                                HeightRequest="80"
+                                IsVisible="True"
+                                MaximumWidthRequest="80"
+                                RepeatCount="-1"
+                                Scale="2"
+                                Source="crud_delete.json" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+                <Grid
+                    Grid.Row="1"
+                    Margin="0,0,0,50"
+                    MaximumWidthRequest="900">
+                    <VerticalStackLayout Spacing="10">
+                        <Border
+                            Margin="20,0,20,0"
+                            Padding="20"
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                              Light={StaticResource LightBackground}}"
+                            Stroke="Transparent"
+                            StrokeShape="RoundRectangle 10"
+                            StyleClass="Elevation1">
+                            <VerticalStackLayout Spacing="10">
+                                <Image
+                                    HorizontalOptions="Center"
+                                    MaximumWidthRequest="50"
+                                    VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource
+                                            FontFamily="MaterialRegular"
+                                            Glyph="{x:Static m:MaterialRegular.Warning}"
+                                            Size="40"
+                                            Color="IndianRed" />
+                                    </Image.Source>
+                                </Image>
+                                <Label
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center"
+                                    Text="{Binding Warehouse.Name}"
+                                    TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                Light={StaticResource Jet}}" />
+                                <Label
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center"
+                                    TextColor="{AppThemeBinding Dark={StaticResource Gray400},
+                                                                Light={StaticResource Charcoal}}"
+                                    VerticalOptions="Center">
+                                    After removing this warehouse,
+                                </Label>
+                                <Label
+                                    Margin="0,-10,0,0"
+                                    FontAttributes="Bold"
+                                    HorizontalOptions="Center"
+                                    TextColor="{AppThemeBinding Dark={StaticResource Gray400},
+                                                                Light={StaticResource Charcoal}}"
+                                    VerticalOptions="Center">
+                                    customers won't be able to select this warehouse.
+                                </Label>
+                                <Button
+                                    BackgroundColor="IndianRed"
+                                    Command="{Binding DeleteWarehouseCommand}"
+                                    HorizontalOptions="Center"
+                                    Text="Delete"
+                                    TextColor="White" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</base:SfContentPage>

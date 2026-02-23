@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Users.UserProfilePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:controls="clr-namespace:Mde.Project.Mobile.Controls"
+    xmlns:converters="clr-namespace:Mde.Project.Mobile.Converters"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:user="clr-namespace:Mde.Project.Mobile.Models.Accounts"
+    xmlns:users="clr-namespace:Mde.Project.Mobile.ViewModels.App.Users"
+    Title="User Profile"
+    x:DataType="users:UserProfileViewModel">
+    <base:SfContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding InitializeProfileCommand}" EventName="Loaded" />
+    </base:SfContentPage.Behaviors>
+    <ScrollView>
+        <VerticalStackLayout Padding="10">
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center" />
+            <Grid
+                Margin="5,5,5,5"
+                ColumnDefinitions="*"
+                IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"
+                MaximumWidthRequest="600"
+                RowDefinitions="Auto, Auto, Auto, Auto, Auto">
+                <Grid
+                    Grid.Row="0"
+                    Padding="0,10"
+                    HeightRequest="200"
+                    HorizontalOptions="Center"
+                    WidthRequest="200">
+                    <VerticalStackLayout
+                        Margin="0,0,0,20"
+                        HorizontalOptions="Center"
+                        Spacing="10">
+
+                        <Border
+                            BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                              Light={StaticResource LightBackground}}"
+                            HorizontalOptions="Center"
+                            Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                     Light={StaticResource Gray100}}"
+                            StrokeShape="RoundRectangle 50">
+                            <Image
+                                x:Name="ProfilePicture"
+                                Aspect="AspectFill"
+                                HeightRequest="100"
+                                Source="{Binding User.ImageUrl}"
+                                WidthRequest="100" />
+                        </Border>
+
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="20"
+                            HorizontalOptions="Center"
+                            Text="{Binding User.FullName}"
+                            TextColor="{AppThemeBinding Dark=White,
+                                                        Light=Black}" />
+                    </VerticalStackLayout>
+                </Grid>
+                <Grid Grid.Row="1" Margin="0,0,0,20">
+                    <Border
+                        Padding="20"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource LightJet},
+                                                          Light={StaticResource Gray100}}"
+                        Stroke="{AppThemeBinding Dark={StaticResource Jet},
+                                                 Light={StaticResource Gray100}}"
+                        StrokeShape="RoundRectangle 12"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="10">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                Text="Account Info"
+                                TextColor="{AppThemeBinding Dark=White,
+                                                            Light=Black}" />
+
+                            <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                <Image>
+                                    <Image.Source>
+                                        <FontImageSource
+                                            FontFamily="MaterialRegular"
+                                            Glyph="{x:Static m:MaterialRegular.Numbers}"
+                                            Size="23"
+                                            Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                    Light={StaticResource Charcoal}}" />
+                                    </Image.Source>
+                                </Image>
+                                <Label Text="{Binding User.Id}" />
+                            </HorizontalStackLayout>
+
+                            <HorizontalStackLayout Spacing="6" VerticalOptions="Center">
+                                <Image>
+                                    <Image.Source>
+                                        <FontImageSource
+                                            FontFamily="MaterialRegular"
+                                            Glyph="{x:Static m:MaterialRegular.Email}"
+                                            Size="23"
+                                            Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                    Light={StaticResource Charcoal}}" />
+                                    </Image.Source>
+                                </Image>
+                                <Label Text="{Binding User.Email}" />
+                            </HorizontalStackLayout>
+
+                            <Label FontAttributes="Bold" Text="Roles:" />
+                            <HorizontalStackLayout>
+                                <CollectionView ItemsSource="{Binding User.Roles}">
+                                    <CollectionView.ItemsLayout>
+                                        <LinearItemsLayout ItemSpacing="3" Orientation="Horizontal" />
+                                    </CollectionView.ItemsLayout>
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate x:DataType="user:UserProfileModel">
+                                            <Border
+                                                Margin="7,0,0,0"
+                                                Padding="10,0,10,0"
+                                                BackgroundColor="{StaticResource Charcoal}"
+                                                Stroke="{StaticResource Cerulean}"
+                                                StrokeShape="RoundRectangle 10">
+                                                <Label
+                                                    HorizontalOptions="Center"
+                                                    Text="{Binding .}"
+                                                    TextColor="White"
+                                                    VerticalOptions="Center" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+                <Grid Grid.Row="2" Margin="0,0,0,20">
+                    <Border
+                        Padding="20"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource LightJet},
+                                                          Light={StaticResource Gray100}}"
+                        Stroke="{AppThemeBinding Dark={StaticResource Jet},
+                                                 Light={StaticResource Gray100}}"
+                        StrokeShape="RoundRectangle 12"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="10">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                Text="Profile Image"
+                                TextColor="{AppThemeBinding Dark=White,
+                                                            Light=Black}" />
+
+                            <HorizontalStackLayout Spacing="12" VerticalOptions="Center">
+                                <material:ButtonView
+                                    BackgroundColor="{StaticResource Charcoal}"
+                                    HorizontalOptions="Center"
+                                    IsVisible="{Binding FileName, Converter={toolkit:IsStringNullOrWhiteSpaceConverter}}"
+                                    PressedCommand="{Binding PickImageCommand}"
+                                    StyleClass="FilledButton"
+                                    VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Image
+                                            HeightRequest="20"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            WidthRequest="20">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Upload}"
+                                                    Size="20"
+                                                    Color="{StaticResource GhostWhite}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label TextColor="{StaticResource GhostWhite}">
+                                            Select Profile Image
+                                        </Label>
+                                    </HorizontalStackLayout>
+                                </material:ButtonView>
+                                <material:ButtonView
+                                    BackgroundColor="{StaticResource FernGreen}"
+                                    HorizontalOptions="Center"
+                                    IsVisible="{Binding FileName, Converter={toolkit:IsStringNotNullOrWhiteSpaceConverter}}"
+                                    PressedCommand="{Binding UploadImageCommand}"
+                                    StyleClass="FilledButton"
+                                    VerticalOptions="Center">
+                                    <HorizontalStackLayout Spacing="10">
+                                        <Image
+                                            HeightRequest="20"
+                                            HorizontalOptions="Center"
+                                            VerticalOptions="Center"
+                                            WidthRequest="20">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Save}"
+                                                    Size="20"
+                                                    Color="{StaticResource GhostWhite}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label TextColor="{StaticResource GhostWhite}">
+                                            Upload New Image
+                                        </Label>
+                                    </HorizontalStackLayout>
+                                </material:ButtonView>
+                                <Label
+                                    FontSize="14"
+                                    IsVisible="{Binding FileName, Converter={toolkit:IsStringNullOrEmptyConverter}}"
+                                    Text="{Binding FileName}"
+                                    TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                Light={StaticResource Charcoal}}"
+                                    VerticalOptions="Center" />
+
+                                <material:ButtonView
+                                    BackgroundColor="IndianRed"
+                                    HorizontalOptions="Center"
+                                    IsVisible="{Binding FileName, Converter={toolkit:IsStringNotNullOrWhiteSpaceConverter}}"
+                                    PressedCommand="{Binding RemoveProfileImageCommand}"
+                                    StyleClass="FilledButton"
+                                    VerticalOptions="Center">
+                                    <Image
+                                        HeightRequest="20"
+                                        HorizontalOptions="Center"
+                                        VerticalOptions="Center"
+                                        WidthRequest="20">
+                                        <Image.Source>
+                                            <FontImageSource
+                                                FontFamily="MaterialRegular"
+                                                Glyph="{x:Static m:MaterialRegular.Delete}"
+                                                Size="20"
+                                                Color="{StaticResource GhostWhite}" />
+                                        </Image.Source>
+                                    </Image>
+                                </material:ButtonView>
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+                <Grid Grid.Row="3" Margin="0,0,0,20">
+                    <Border
+                        Padding="20"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource LightJet},
+                                                          Light={StaticResource Gray100}}"
+                        Stroke="{AppThemeBinding Dark={StaticResource Jet},
+                                                 Light={StaticResource Gray100}}"
+                        StrokeShape="RoundRectangle 12"
+                        StrokeThickness="1">
+                        <VerticalStackLayout Spacing="10">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="16"
+                                Text="External Accounts"
+                                TextColor="{AppThemeBinding Dark=White,
+                                                            Light=Black}" />
+
+                            <Grid
+                                ColumnDefinitions="8*,2*"
+                                ColumnSpacing="10"
+                                HorizontalOptions="Fill">
+                                <material:ButtonView
+                                    Grid.Column="0"
+                                    BackgroundColor="{StaticResource Charcoal}"
+                                    IsEnabled="{Binding HasMicrosoftAccount, Converter={toolkit:InvertedBoolConverter}}"
+                                    PressedCommand="{Binding MicrosoftLinkCommand}">
+                                    <Grid
+                                        Padding="1"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="Center">
+                                        <HorizontalStackLayout HorizontalOptions="Start" Spacing="10">
+                                            <Border
+                                                Padding="3"
+                                                BackgroundColor="{StaticResource GhostWhite}"
+                                                Stroke="Transparent"
+                                                StrokeShape="RoundRectangle 5"
+                                                VerticalOptions="Center">
+                                                <Image
+                                                    HeightRequest="24"
+                                                    Source="microsoft_icon.png"
+                                                    WidthRequest="24" />
+                                            </Border>
+                                            <Label
+                                                Text="Add Microsoft account"
+                                                TextColor="{StaticResource GhostWhite}"
+                                                VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </material:ButtonView>
+
+                                <ImageButton
+                                    Grid.Column="1"
+                                    Padding="5"
+                                    BackgroundColor="Transparent"
+                                    Command="{Binding RemoveMicrosoftLinkCommand}"
+                                    HeightRequest="40"
+                                    HorizontalOptions="End"
+                                    IsVisible="{Binding HasMicrosoftAccount}"
+                                    Source="{x:Static m:MaterialRegular.Delete}"
+                                    VerticalOptions="Center"
+                                    WidthRequest="40" />
+                            </Grid>
+
+                            <Grid
+                                ColumnDefinitions="8*,2*"
+                                ColumnSpacing="10"
+                                HorizontalOptions="Fill">
+                                <material:ButtonView
+                                    Grid.Column="0"
+                                    BackgroundColor="{StaticResource Charcoal}"
+                                    IsVisible="{Binding HasGoogleAccount, Converter={toolkit:InvertedBoolConverter}}"
+                                    PressedCommand="{Binding GoogleLinkCommand}">
+                                    <Grid HorizontalOptions="Fill" VerticalOptions="Center">
+                                        <HorizontalStackLayout HorizontalOptions="Start" Spacing="10">
+                                            <Border
+                                                Padding="5"
+                                                BackgroundColor="{StaticResource GhostWhite}"
+                                                Stroke="Transparent"
+                                                StrokeShape="RoundRectangle 5"
+                                                VerticalOptions="Center">
+                                                <Image
+                                                    HeightRequest="20"
+                                                    Source="google_icon.png"
+                                                    WidthRequest="20" />
+                                            </Border>
+                                            <Label
+                                                Text="Add Google Account"
+                                                TextColor="{StaticResource GhostWhite}"
+                                                VerticalOptions="Center" />
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                </material:ButtonView>
+
+                                <Border
+                                    Grid.Column="0"
+                                    Padding="10"
+                                    BackgroundColor="{StaticResource FernGreen}"
+                                    IsVisible="{Binding HasGoogleAccount}"
+                                    Stroke="Transparent"
+                                    StrokeShape="RoundRectangle 18">
+                                    <HorizontalStackLayout HorizontalOptions="Start" Spacing="10">
+                                        <Border
+                                            Padding="5"
+                                            BackgroundColor="{StaticResource GhostWhite}"
+                                            Stroke="Transparent"
+                                            StrokeShape="RoundRectangle 5"
+                                            VerticalOptions="Center">
+                                            <Image
+                                                HeightRequest="20"
+                                                Source="google_icon.png"
+                                                WidthRequest="20" />
+                                        </Border>
+                                        <Image>
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Numbers}"
+                                                    Size="23"
+                                                    Color="{StaticResource GhostWhite}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            Text="{Binding GoogleAccountId}"
+                                            TextColor="{StaticResource GhostWhite}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+
+                                <material:ButtonView
+                                    Grid.Column="1"
+                                    Padding="5"
+                                    BackgroundColor="IndianRed"
+                                    HeightRequest="50"
+                                    HorizontalOptions="End"
+                                    IsVisible="{Binding HasGoogleAccount}"
+                                    PressedCommand="{Binding RemoveGoogleLinkCommand}"
+                                    StyleClass="FilledButton"
+                                    VerticalOptions="Center"
+                                    WidthRequest="50">
+                                    <Border
+                                        Padding="5"
+                                        BackgroundColor="Transparent"
+                                        Stroke="Transparent"
+                                        StrokeShape="RoundRectangle 5">
+                                        <Image
+                                            HeightRequest="20"
+                                            HorizontalOptions="Center"
+                                            Source="{FontImageSource FontFamily=MaterialRegular,
+                                                                     Glyph={x:Static m:MaterialRegular.Delete},
+                                                                     Color=GhostWhite}"
+                                            VerticalOptions="Center"
+                                            WidthRequest="20" />
+                                    </Border>
+                                </material:ButtonView>
+                            </Grid>
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+                <Grid Grid.Row="4">
+                    <material:ButtonView
+                        BackgroundColor="IndianRed"
+                        PressedCommand="{Binding LogoutCommand}"
+                        StyleClass="FilledButton"
+                        WidthRequest="150">
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                            <Image
+                                Aspect="AspectFit"
+                                HeightRequest="20"
+                                Source="{FontImageSource FontFamily=MaterialRegular,
+                                                         Glyph={x:Static m:MaterialRegular.Logout}}"
+                                VerticalOptions="Center"
+                                WidthRequest="20" />
+                            <Label
+                                FontAttributes="Bold"
+                                Text="Logout"
+                                TextColor="White"
+                                VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </material:ButtonView>
+                </Grid>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</base:SfContentPage>

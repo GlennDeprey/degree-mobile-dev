@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Map.GoogleMapsFramePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:Mde.Project.Mobile.ViewModels.App.Maps"
+    Title="{Binding Title}"
+    x:DataType="vm:GoogleMapsFrameViewModel">
+    <Grid>
+        <ActivityIndicator
+            x:Name="Indicator"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center" />
+        <WebView IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}" Source="{Binding Source}" />
+    </Grid>
+</ContentPage>

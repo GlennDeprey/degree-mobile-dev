@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.DashboardPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:app="clr-namespace:Mde.Project.Mobile.ViewModels.App"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:dashboard="clr-namespace:Mde.Project.Mobile.Models.Dashboard"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    Title="Dashboard"
+    x:DataType="app:DashboardViewModel">
+    <base:SfContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding InitializeDashboardCommand}" EventName="Appearing" />
+    </base:SfContentPage.Behaviors>
+    <base:SfContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding ProfileNavigationCommand}"
+            Order="Primary"
+            Priority="0">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Account_circle}"
+                    Color="{AppThemeBinding Light={StaticResource Charcoal},
+                                            Dark={StaticResource Warehouse}}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </base:SfContentPage.ToolbarItems>
+    <AbsoluteLayout>
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center" />
+        <Image
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="All"
+            Aspect="AspectFill"
+            Source="subtle_prism.png" />
+        <ScrollView AbsoluteLayout.LayoutBounds="0,0,1,1" AbsoluteLayout.LayoutFlags="All">
+            <Grid RowDefinitions="360,*">
+                <Grid
+                    Grid.Row="0"
+                    Margin="0,15,0,20"
+                    Padding="10"
+                    HorizontalOptions="Center"
+                    IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}">
+                    <VerticalStackLayout HeightRequest="300">
+                        <CarouselView
+                            HeightRequest="250"
+                            HorizontalOptions="Center"
+                            HorizontalScrollBarVisibility="Never"
+                            IndicatorView="{Reference CarouselIndicatorView}"
+                            ItemsSource="{Binding CarouselItems}"
+                            Loop="True"
+                            Position="{Binding SelectedPosition}"
+                            VerticalOptions="Center">
+                            <CarouselView.ItemTemplate>
+                                <DataTemplate x:DataType="dashboard:CarouselItemModel">
+                                    <VerticalStackLayout>
+                                        <Border
+                                            BackgroundColor="{AppThemeBinding Light={StaticResource Warehouse},
+                                                                              Dark={StaticResource Jet}}"
+                                            HeightRequest="230"
+                                            MaximumWidthRequest="900"
+                                            Stroke="Transparent"
+                                            StrokeShape="RoundRectangle 20"
+                                            StyleClass="Elevation2">
+                                            <Grid ColumnDefinitions="*,*">
+                                                <skia:SKLottieView
+                                                    Grid.Column="0"
+                                                    Margin="{Binding Margin}"
+                                                    HeightRequest="220"
+                                                    IsEnabled="True"
+                                                    IsVisible="True"
+                                                    RepeatCount="-1"
+                                                    Scale="{Binding Scale}"
+                                                    Source="{Binding AnimationSource}"
+                                                    VerticalOptions="End" />
+                                                <VerticalStackLayout
+                                                    Grid.Column="1"
+                                                    Padding="10"
+                                                    HorizontalOptions="Start"
+                                                    Spacing="5"
+                                                    VerticalOptions="Center">
+                                                    <Label
+                                                        FontAttributes="Bold"
+                                                        FontSize="20"
+                                                        Text="{Binding Title}"
+                                                        TextColor="{AppThemeBinding Light={StaticResource Charcoal},
+                                                                                    Dark={StaticResource GhostWhite}}" />
+                                                    <Label Text="{Binding Content}" TextColor="{AppThemeBinding Light={StaticResource Jet}, Dark={StaticResource GhostWhite}}" />
+                                                </VerticalStackLayout>
+                                            </Grid>
+                                        </Border>
+                                    </VerticalStackLayout>
+                                </DataTemplate>
+                            </CarouselView.ItemTemplate>
+                        </CarouselView>
+                        <IndicatorView
+                            x:Name="CarouselIndicatorView"
+                            Margin="0,5,0,0"
+                            HorizontalOptions="Center"
+                            IndicatorColor="{StaticResource Gray100}"
+                            IndicatorSize="10"
+                            IndicatorsShape="Circle"
+                            SelectedIndicatorColor="{StaticResource Gray300}" />
+                    </VerticalStackLayout>
+                </Grid>
+
+                <Grid
+                    Grid.Row="1"
+                    IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"
+                    MaximumWidthRequest="900">
+                    <Border
+                        Margin="0,-40,0,-2"
+                        Stroke="Transparent"
+                        StrokeShape="RoundRectangle 30,30,0,0"
+                        StyleClass="Elevation1">
+                        <Grid>
+                            <RoundRectangle CornerRadius="30,30,0,0" Fill="{AppThemeBinding Light={StaticResource Warehouse}, Dark={StaticResource Jet}}" />
+                            <VerticalStackLayout>
+                                <FlexLayout
+                                    x:Name="DashboardFlexLayout"
+                                    Margin="20,30,20,13"
+                                    AlignItems="Start"
+                                    Direction="Row"
+                                    HorizontalOptions="Center"
+                                    JustifyContent="Center"
+                                    Wrap="Wrap">
+                                    <material:ButtonView
+                                        Margin="0,0,5,5"
+                                        BackgroundColor="{StaticResource Charcoal}"
+                                        HeightRequest="125"
+                                        PressedCommand="{Binding ScannerNavigationCommand}"
+                                        StyleClass="Elevation1"
+                                        WidthRequest="125">
+                                        <Grid Padding="10">
+                                            <VerticalStackLayout
+                                                HorizontalOptions="Center"
+                                                Spacing="5"
+                                                VerticalOptions="Center">
+                                                <skia:SKLottieView
+                                                    HeightRequest="50"
+                                                    IsEnabled="True"
+                                                    RepeatCount="-1"
+                                                    Source="dashboard_scanner.json" />
+                                                <Label
+                                                    HorizontalOptions="Center"
+                                                    Text="Scanner"
+                                                    TextColor="{StaticResource GhostWhite}" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </material:ButtonView>
+                                    <material:ButtonView
+                                        Margin="0,0,5,5"
+                                        BackgroundColor="{StaticResource Charcoal}"
+                                        HeightRequest="125"
+                                        PressedCommand="{Binding ProductsNavigationCommand}"
+                                        StyleClass="Elevation1"
+                                        WidthRequest="125">
+                                        <Grid Padding="10">
+                                            <VerticalStackLayout
+                                                HorizontalOptions="Center"
+                                                Spacing="5"
+                                                VerticalOptions="Center">
+                                                <skia:SKLottieView
+                                                    HeightRequest="50"
+                                                    IsVisible="True"
+                                                    RepeatCount="-1"
+                                                    Source="dashboard_products.json"
+                                                    WidthRequest="50" />
+                                                <Label
+                                                    Text="Products"
+                                                    TextColor="{StaticResource GhostWhite}"
+                                                    VerticalOptions="Center" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </material:ButtonView>
+                                    <material:ButtonView
+                                        Margin="0,0,5,5"
+                                        BackgroundColor="{StaticResource Charcoal}"
+                                        HeightRequest="125"
+                                        PressedCommand="{Binding WarehousesNavigationCommand}"
+                                        StyleClass="Elevation1"
+                                        WidthRequest="125">
+                                        <Grid Padding="10">
+                                            <VerticalStackLayout
+                                                HorizontalOptions="Center"
+                                                Spacing="5"
+                                                VerticalOptions="Center">
+                                                <skia:SKLottieView
+                                                    HeightRequest="50"
+                                                    IsVisible="True"
+                                                    RepeatCount="-1"
+                                                    Source="dashboard_warehouses.json"
+                                                    WidthRequest="50" />
+                                                <Label
+                                                    Text="Warehouses"
+                                                    TextColor="{StaticResource GhostWhite}"
+                                                    VerticalOptions="Center" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </material:ButtonView>
+                                    <material:ButtonView
+                                        Margin="0,0,5,5"
+                                        BackgroundColor="{StaticResource Charcoal}"
+                                        HeightRequest="125"
+                                        PressedCommand="{Binding OperationsNavigationCommand}"
+                                        StyleClass="Elevation1"
+                                        WidthRequest="125">
+                                        <Grid Padding="10">
+                                            <VerticalStackLayout
+                                                HorizontalOptions="Center"
+                                                Spacing="5"
+                                                VerticalOptions="Center">
+                                                <skia:SKLottieView
+                                                    Margin="0,-40,0,0"
+                                                    HeightRequest="120"
+                                                    IsVisible="True"
+                                                    RepeatCount="-1"
+                                                    Source="dashboard_operations.json" />
+                                                <Label
+                                                    Margin="0,-30,0,0"
+                                                    HorizontalOptions="Center"
+                                                    Text="Operations"
+                                                    TextColor="{StaticResource GhostWhite}" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </material:ButtonView>
+                                    <material:ButtonView
+                                        Margin="0,0,5,5"
+                                        BackgroundColor="{StaticResource Charcoal}"
+                                        HeightRequest="125"
+                                        PressedCommand="{Binding ReportsNavigationCommand}"
+                                        StyleClass="Elevation1"
+                                        WidthRequest="125">
+                                        <Grid Padding="10">
+                                            <VerticalStackLayout
+                                                HorizontalOptions="Center"
+                                                Spacing="5"
+                                                VerticalOptions="Center">
+                                                <skia:SKLottieView
+                                                    HeightRequest="50"
+                                                    IsVisible="True"
+                                                    RepeatCount="-1"
+                                                    Source="dashboard_reports.json" />
+                                                <Label
+                                                    HorizontalOptions="Center"
+                                                    Text="Reports"
+                                                    TextColor="{StaticResource GhostWhite}" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </material:ButtonView>
+                                    <material:ButtonView
+                                        Margin="0,0,5,5"
+                                        BackgroundColor="{StaticResource Charcoal}"
+                                        HeightRequest="125"
+                                        PressedCommand="{Binding StatisticsNavigationCommand}"
+                                        StyleClass="Elevation1"
+                                        WidthRequest="125">
+                                        <Grid Padding="10">
+                                            <VerticalStackLayout
+                                                HorizontalOptions="Center"
+                                                Spacing="5"
+                                                VerticalOptions="Center">
+                                                <skia:SKLottieView
+                                                    HeightRequest="50"
+                                                    IsVisible="True"
+                                                    RepeatCount="-1"
+                                                    Source="dashboard_stats.json" />
+                                                <Label
+                                                    HorizontalOptions="Center"
+                                                    Text="Statistics"
+                                                    TextColor="{StaticResource GhostWhite}" />
+                                            </VerticalStackLayout>
+                                        </Grid>
+                                    </material:ButtonView>
+                                </FlexLayout>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Grid>
+        </ScrollView>
+    </AbsoluteLayout>
+</base:SfContentPage>
+

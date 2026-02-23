@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Warehouses.WarehouseDetailPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:controls="clr-namespace:Mde.Project.Mobile.Controls"
+    xmlns:converters="clr-namespace:Mde.Project.Mobile.Converters"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:m="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:Mde.Project.Mobile.ViewModels.App.Warehouses"
+    Title="Warehouse Detail"
+    x:DataType="vm:WarehouseDetailViewModel">
+    <base:SfContentPage.ToolbarItems>
+        <controls:SfToolBarItem
+            Command="{Binding WarehouseEditNavigationCommand}"
+            CommandParameter="{Binding Warehouse.Id}"
+            Order="Primary"
+            Priority="1">
+            <!--  IsVisible="{Binding IsAdmin}"  -->
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Edit}"
+                    Color="{AppThemeBinding Light={StaticResource Charcoal},
+                                            Dark={StaticResource Warehouse}}" />
+            </ToolbarItem.IconImageSource>
+        </controls:SfToolBarItem>
+        <controls:SfToolBarItem
+            Command="{Binding WarehouseDeleteNavigationCommand}"
+            CommandParameter="{Binding Warehouse.Id}"
+            Order="Primary"
+            Priority="0">
+            <!--  IsVisible="{Binding IsAdmin}"  -->
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Delete}"
+                    Color="IndianRed" />
+            </ToolbarItem.IconImageSource>
+        </controls:SfToolBarItem>
+    </base:SfContentPage.ToolbarItems>
+    <ScrollView>
+        <VerticalStackLayout>
+            <ActivityIndicator
+                HorizontalOptions="Center"
+                IsRunning="{Binding IsBusy}"
+                IsVisible="{Binding IsBusy}"
+                VerticalOptions="Center" />
+            <Grid
+                Margin="5,5,5,5"
+                IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"
+                MaximumWidthRequest="900"
+                RowDefinitions="150,*">
+                <Grid
+                    Grid.Row="0"
+                    Margin="0,0,0,30"
+                    HeightRequest="100"
+                    WidthRequest="100">
+                    <Border
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                          Light={StaticResource LightBackground}}"
+                        HorizontalOptions="Center"
+                        Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                 Light={StaticResource Gray100}}"
+                        StrokeShape="RoundRectangle 50">
+                        <Image Aspect="AspectFill" Source="{Binding ImageUrl}" />
+                    </Border>
+                </Grid>
+
+                <Grid Grid.Row="1" Margin="0,0,0,50">
+                    <VerticalStackLayout>
+                        <m:ExpanderView Padding="10" IsExpanded="True">
+                            <m:ExpanderView.Header>
+                                <HorizontalStackLayout>
+                                    <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Image.Source>
+                                            <FontImageSource
+                                                FontFamily="MaterialRegular"
+                                                Glyph="{x:Static m:MaterialRegular.Info_outline}"
+                                                Size="23"
+                                                Color="{StaticResource GhostWhite}" />
+                                        </Image.Source>
+                                    </Image>
+                                    <Label
+                                        Margin="7,0,0,0"
+                                        HorizontalOptions="Center"
+                                        TextColor="GhostWhite"
+                                        VerticalOptions="Center">
+                                        Information
+                                    </Label>
+                                </HorizontalStackLayout>
+                            </m:ExpanderView.Header>
+
+                            <VerticalStackLayout>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Text_fields}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            Name:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.Name, Converter={converters:CurrencyConverter}}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Short_text}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            Shortname:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.ShortName, Converter={converters:CurrencyConverter}}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Phone_android}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            Phone:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.Phone, Converter={converters:CurrencyConverter}}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Money}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            Earnings:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.Earnings, Converter={converters:CurrencyConverter}}"
+                                            TextColor="{StaticResource YellowGreen}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                            </VerticalStackLayout>
+                        </m:ExpanderView>
+                        <m:ExpanderView Padding="10">
+                            <m:ExpanderView.Header>
+                                <HorizontalStackLayout>
+                                    <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Image.Source>
+                                            <FontImageSource
+                                                FontFamily="MaterialRegular"
+                                                Glyph="{x:Static m:MaterialRegular.My_location}"
+                                                Size="23"
+                                                Color="{StaticResource GhostWhite}" />
+                                        </Image.Source>
+                                    </Image>
+                                    <Label
+                                        Margin="7,0,0,0"
+                                        HorizontalOptions="Center"
+                                        TextColor="GhostWhite"
+                                        VerticalOptions="Center">
+                                        Location
+                                    </Label>
+                                </HorizontalStackLayout>
+                            </m:ExpanderView.Header>
+
+                            <VerticalStackLayout>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Flag}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            Country:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.Location.Country}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Domain}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            State:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.Location.State}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Location_city}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            City:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.Location.City}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Numbers}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            Postal Code:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.Location.PostalCode}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Add_location_alt}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            Address:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.Location.Address}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    IsVisible="{Binding HasLocation}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <Button
+                                        BackgroundColor="{StaticResource Charcoal}"
+                                        BorderColor="{AppThemeBinding Dark={StaticResource LightJet},
+                                                                      Light={StaticResource Gray100}}"
+                                        Command="{Binding WarehouseMapsNavigationCommand}"
+                                        StyleClass="FilledButton"
+                                        Text="Watch on maps"
+                                        TextColor="{StaticResource GhostWhite}" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </m:ExpanderView>
+                        <m:ExpanderView Padding="10">
+                            <m:ExpanderView.Header>
+                                <HorizontalStackLayout>
+                                    <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Image.Source>
+                                            <FontImageSource
+                                                FontFamily="FASolid"
+                                                Glyph="{x:Static fa:Solid.Store}"
+                                                Size="18"
+                                                Color="{StaticResource GhostWhite}" />
+                                        </Image.Source>
+                                    </Image>
+                                    <Label
+                                        Margin="7,0,0,0"
+                                        HorizontalOptions="Center"
+                                        TextColor="GhostWhite"
+                                        VerticalOptions="Center">
+                                        Stock Info
+                                    </Label>
+                                </HorizontalStackLayout>
+                            </m:ExpanderView.Header>
+                            <VerticalStackLayout>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <material:ButtonView
+                                            BackgroundColor="{StaticResource Charcoal}"
+                                            PressedCommand="{Binding WarehouseProductsPdfDownloadCommand}"
+                                            StyleClass="FilledButton">
+                                            <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                                                <Image
+                                                    Aspect="AspectFit"
+                                                    HeightRequest="20"
+                                                    Source="{FontImageSource FontFamily=MaterialRegular,
+                                                                             Glyph={x:Static m:MaterialRegular.Picture_as_pdf}}"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="20" />
+                                                <Label
+                                                    FontAttributes="Bold"
+                                                    Text="Download Product Labels"
+                                                    TextColor="White"
+                                                    VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
+                                        </material:ButtonView>
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Inventory}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            Total Products:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.Stock.TotalItems, Converter={converters:ProductCountToStringConverter}}"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Arrow_upward}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            Highest Product Price:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.Stock.HighestItemPrice, Converter={converters:CurrencyConverter}}"
+                                            TextColor="IndianRed"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Remove}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            Average Product Price:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.Stock.AverageItemPrice, Converter={converters:CurrencyConverter}}"
+                                            TextColor="{StaticResource CarrotOrange}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="20"
+                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                                      Light={StaticResource LightBackground}}"
+                                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                             Light={StaticResource Gray100}}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <HorizontalStackLayout HorizontalOptions="Fill" Spacing="3">
+                                        <Image HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Arrow_downward}"
+                                                    Size="23"
+                                                    Color="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                            Light={StaticResource Charcoal}}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontAttributes="Bold"
+                                            HorizontalOptions="Center"
+                                            TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                        Light={StaticResource Charcoal}}"
+                                            VerticalOptions="Center">
+                                            Lowest Product Price:
+                                        </Label>
+                                        <Label
+                                            Margin="10,0,0,0"
+                                            HorizontalOptions="Center"
+                                            Text="{Binding Warehouse.Stock.LowestItemPrice, Converter={converters:CurrencyConverter}}"
+                                            TextColor="{StaticResource YellowGreen}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+                            </VerticalStackLayout>
+                        </m:ExpanderView>
+                    </VerticalStackLayout>
+                </Grid>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</base:SfContentPage>

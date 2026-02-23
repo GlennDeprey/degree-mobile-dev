@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Mde.Project.Mobile.OperationsShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:app="clr-namespace:Mde.Project.Mobile.Pages.App.Operations"
+    xmlns:local="clr-namespace:Mde.Project.Mobile"
+    xmlns:m="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    Shell.FlyoutBehavior="Disabled">
+
+    <!--  Stock Configuration Page  -->
+    <TabBar>
+        <ShellContent
+            Title="Stock Configuration"
+            ContentTemplate="{DataTemplate app:StockConfigurationPage}"
+            Icon="{FontImageSource FontFamily=MaterialRegular,
+                                   Glyph={x:Static m:MaterialRegular.Settings}}" />
+        <ShellContent
+            Title="Stock Orders"
+            ContentTemplate="{DataTemplate app:StockOrderPage}"
+            Icon="{FontImageSource FontFamily=MaterialRegular,
+                                   Glyph={x:Static m:MaterialRegular.Add_chart}}" />
+
+        <ShellContent
+            Title="Stock Transfers"
+            ContentTemplate="{DataTemplate app:StockTransferPage}"
+            Icon="{FontImageSource FontFamily=MaterialRegular,
+                                   Glyph={x:Static m:MaterialRegular.Transfer_within_a_station}}" />
+    </TabBar>
+</Shell>

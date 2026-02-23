@@ -1,0 +1,326 @@
+﻿<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Scanner.ScannerPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:controls="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:converters="clr-namespace:Mde.Project.Mobile.Converters"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:validations="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:vm="clr-namespace:Mde.Project.Mobile.ViewModels.App.Scanner"
+    Title="Scanner"
+    x:DataType="vm:ScannerViewModel">
+    <base:SfContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding InitializeCommand}" EventName="Loaded" />
+    </base:SfContentPage.Behaviors>
+    <Grid RowDefinitions="*, Auto">
+        <VerticalStackLayout
+            HorizontalOptions="Center"
+            IsVisible="{Binding HasProducts, Converter={toolkit:InvertedBoolConverter}}"
+            MaximumWidthRequest="900">
+            <skia:SKLottieView
+                Margin="0,0,0,0"
+                HeightRequest="400"
+                IsEnabled="{Binding HasProducts, Converter={toolkit:InvertedBoolConverter}}"
+                IsVisible="{Binding HasProducts, Converter={toolkit:InvertedBoolConverter}}"
+                RepeatCount="-1"
+                Source="scan_products.json"
+                WidthRequest="400" />
+            <Label FontSize="20" HorizontalOptions="Center">No Products scanned</Label>
+            <Label HorizontalOptions="Center" TextColor="{StaticResource Gray300}">Scan products by using the scanner below...</Label>
+        </VerticalStackLayout>
+        <Label
+            Grid.Row="0"
+            Margin="20,15,10,0"
+            FontSize="18"
+            IsVisible="{Binding HasProducts}"
+            MaximumWidthRequest="900"
+            TextColor="{StaticResource Gray300}">
+            Your Products
+        </Label>
+        <CollectionView
+            Grid.Row="0"
+            Margin="10,60,10,50"
+            ItemsSource="{Binding Products}"
+            VerticalOptions="Fill">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="vm:ScannerItemViewModel">
+                    <Border
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                          Light={StaticResource LightBackground}}"
+                        MaximumWidthRequest="900"
+                        Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                 Light={StaticResource Gray100}}"
+                        StrokeShape="RoundRectangle 10"
+                        StrokeThickness="1">
+                        <Grid
+                            Padding="10,10,10,10"
+                            ColumnDefinitions="110, 1.5*, 1*"
+                            ColumnSpacing="10"
+                            HeightRequest="125">
+
+                            <Border
+                                Grid.Column="0"
+                                BackgroundColor="Transparent"
+                                HeightRequest="100"
+                                Stroke="Transparent"
+                                StrokeShape="RoundRectangle 16"
+                                WidthRequest="100">
+                                <Image
+                                    Aspect="AspectFill"
+                                    HeightRequest="100"
+                                    Source="{Binding ImageSource}"
+                                    WidthRequest="100" />
+                            </Border>
+                            <VerticalStackLayout
+                                Grid.Column="1"
+                                Spacing="3"
+                                VerticalOptions="Center">
+                                <Label Text="{Binding Brand}" TextColor="{StaticResource Gray300}" />
+                                <Label
+                                    FontSize="14"
+                                    Text="{Binding Name}"
+                                    TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                Light={StaticResource Jet}}" />
+                                <Border
+                                    Margin="0,10,0,0"
+                                    Padding="5"
+                                    BackgroundColor="{StaticResource YellowGreen}"
+                                    HorizontalOptions="Start"
+                                    StrokeShape="RoundRectangle 10"
+                                    WidthRequest="70">
+                                    <Label
+                                        HorizontalOptions="Center"
+                                        Text="{Binding Price, Converter={converters:CurrencyConverter}}"
+                                        TextColor="White"
+                                        VerticalOptions="Center" />
+                                </Border>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout
+                                Grid.Column="2"
+                                Margin="0,0,0,0"
+                                HorizontalOptions="End">
+                                <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                                    <Button
+                                        Padding="5"
+                                        BackgroundColor="{StaticResource Charcoal}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ScannerViewModel}}, Path=DecrementQuantityCommand}"
+                                        CommandParameter="{Binding .}"
+                                        CornerRadius="5"
+                                        FontSize="12"
+                                        HeightRequest="30"
+                                        TextColor="White"
+                                        WidthRequest="30">
+                                        <Button.ImageSource>
+                                            <FontImageSource
+                                                FontFamily="MaterialRegular"
+                                                Glyph="{x:Static m:MaterialRegular.Remove}"
+                                                Color="White" />
+                                        </Button.ImageSource>
+                                    </Button>
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="16"
+                                        Text="{Binding Quantity}"
+                                        VerticalOptions="Center" />
+                                    <Button
+                                        Padding="5"
+                                        BackgroundColor="{StaticResource Charcoal}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ScannerViewModel}}, Path=IncrementQuantityCommand}"
+                                        CommandParameter="{Binding .}"
+                                        CornerRadius="5"
+                                        FontSize="12"
+                                        HeightRequest="30"
+                                        TextColor="White"
+                                        WidthRequest="30">
+                                        <Button.ImageSource>
+                                            <FontImageSource
+                                                FontFamily="MaterialRegular"
+                                                Glyph="{x:Static m:MaterialRegular.Add}"
+                                                Color="White" />
+                                        </Button.ImageSource>
+                                    </Button>
+                                </HorizontalStackLayout>
+                            </VerticalStackLayout>
+                            <Button
+                                Grid.Column="2"
+                                Margin="0,0,0,0"
+                                Padding="5"
+                                BackgroundColor="IndianRed"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ScannerViewModel}}, Path=RemoveProductCommand}"
+                                CommandParameter="{Binding .}"
+                                CornerRadius="5"
+                                FontSize="12"
+                                HeightRequest="40"
+                                HorizontalOptions="End"
+                                TextColor="White"
+                                VerticalOptions="End"
+                                WidthRequest="40">
+                                <Button.ImageSource>
+                                    <FontImageSource
+                                        FontFamily="MaterialRegular"
+                                        Glyph="{x:Static m:MaterialRegular.Delete}"
+                                        Color="White" />
+                                </Button.ImageSource>
+                            </Button>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Border
+            Grid.Row="1"
+            Margin="-5,-40,-5,-2"
+            MaximumWidthRequest="900"
+            Stroke="Transparent"
+            StrokeShape="RoundRectangle 30,30,0,0"
+            StyleClass="Elevation1">
+            <Grid
+                Padding="10"
+                BackgroundColor="{AppThemeBinding Light={StaticResource Warehouse},
+                                                  Dark={StaticResource Jet}}"
+                ColumnDefinitions="*, *"
+                RowDefinitions="Auto, Auto">
+                <Grid
+                    Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,0,10">
+                    <OnPlatform x:TypeArguments="View">
+                        <On Platform="Android">
+                            <material:ButtonView
+                                Margin="0,0,0,10"
+                                Padding="0"
+                                BackgroundColor="{StaticResource Charcoal}"
+                                PressedCommand="{Binding ScanProductNavigationCommand}"
+                                StyleClass="Elevation1">
+                                <Grid
+                                    Padding="10"
+                                    HorizontalOptions="Fill"
+                                    VerticalOptions="Center">
+                                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                                        <Image HeightRequest="20" WidthRequest="20">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Barcode_reader}"
+                                                    Color="{StaticResource GhostWhite}" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            Text="Scan Product"
+                                            TextColor="{StaticResource GhostWhite}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </material:ButtonView>
+                        </On>
+                        <On Platform="WinUI">
+                            <controls:FormView IsVisible="{Binding TextScanProductCommand.IsRunning, Converter={toolkit:InvertedBoolConverter}}" SubmitCommand="{Binding TextScanProductCommand}">
+                                <Grid ColumnDefinitions="8*, 2*">
+                                    <material:TextField
+                                        Title="Enter a product barcode"
+                                        Grid.Column="0"
+                                        Margin="0,0,10,0"
+                                        AccentColor="{StaticResource Cerulean}"
+                                        AllowClear="True"
+                                        Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                               Glyph={x:Static m:MaterialRegular.Numbers}}"
+                                        Keyboard="Numeric"
+                                        Text="{Binding BarcodeText}"
+                                        VerticalOptions="Start">
+                                        <validations:RequiredValidation />
+                                        <validations:DigitsOnlyValidation />
+                                        <validations:MaxLengthValidation MaxLength="13" />
+                                        <validations:MinLengthValidation MinLength="13" />
+                                    </material:TextField>
+                                    <material:ButtonView
+                                        Grid.Column="1"
+                                        Margin="0,3,0,0"
+                                        Padding="0,4,0,4"
+                                        controls:FormView.IsSubmitButton="True"
+                                        BackgroundColor="{StaticResource Charcoal}"
+                                        StyleClass="Elevation1"
+                                        VerticalOptions="Start">
+                                        <Grid
+                                            Padding="10"
+                                            HorizontalOptions="Fill"
+                                            VerticalOptions="Center">
+                                            <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                                                <Image HeightRequest="20" WidthRequest="20">
+                                                    <Image.Source>
+                                                        <FontImageSource
+                                                            FontFamily="MaterialRegular"
+                                                            Glyph="{x:Static m:MaterialRegular.Barcode_reader}"
+                                                            Color="{StaticResource GhostWhite}" />
+                                                    </Image.Source>
+                                                </Image>
+                                                <Label
+                                                    Text="Scan Product"
+                                                    TextColor="{StaticResource GhostWhite}"
+                                                    VerticalOptions="Center" />
+                                            </HorizontalStackLayout>
+                                        </Grid>
+                                    </material:ButtonView>
+                                </Grid>
+                            </controls:FormView>
+                        </On>
+                    </OnPlatform>
+                </Grid>
+                <Border
+                    Grid.Row="1"
+                    Grid.Column="0"
+                    Padding="10"
+                    BackgroundColor="{AppThemeBinding Light={StaticResource Warehouse},
+                                                      Dark={StaticResource OffBlack}}"
+                    HorizontalOptions="Start"
+                    Stroke="{AppThemeBinding Light={StaticResource Gray300},
+                                             Dark={StaticResource LightJet}}"
+                    StrokeShape="RoundRectangle 10"
+                    StrokeThickness="1"
+                    VerticalOptions="Center">
+                    <Label
+                        FontSize="22"
+                        HorizontalOptions="Center"
+                        Text="{Binding TotalCost, Converter={converters:CurrencyConverter}}"
+                        TextColor="{AppThemeBinding Light={StaticResource Jet},
+                                                    Dark={StaticResource Gray100}}"
+                        VerticalOptions="Center" />
+                </Border>
+                <material:ButtonView
+                    Grid.Row="1"
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    Padding="10"
+                    BackgroundColor="{StaticResource YellowGreen}"
+                    PressedCommand="{Binding CheckoutOrderCommand}"
+                    StyleClass="Elevation1">
+                    <Grid
+                        Padding="0"
+                        HorizontalOptions="Fill"
+                        VerticalOptions="Center">
+                        <HorizontalStackLayout HorizontalOptions="Center" Spacing="10">
+                            <Image HeightRequest="20" WidthRequest="20">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialRegular"
+                                        Glyph="{x:Static m:MaterialRegular.Shopping_cart_checkout}"
+                                        Color="{StaticResource GhostWhite}" />
+                                </Image.Source>
+                            </Image>
+                            <Label
+                                Text="Checkout"
+                                TextColor="{StaticResource GhostWhite}"
+                                VerticalOptions="Center" />
+                        </HorizontalStackLayout>
+                    </Grid>
+                </material:ButtonView>
+            </Grid>
+        </Border>
+    </Grid>
+</base:SfContentPage>

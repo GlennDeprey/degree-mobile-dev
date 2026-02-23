@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.Authentication.VerifyCodePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:converters="clr-namespace:Mde.Project.Mobile.Converters"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:Mde.Project.Mobile.ViewModels.Authentication"
+    x:DataType="vm:VerifyCodeViewModel"
+    NavigationPage.HasNavigationBar="False">
+    <Grid>
+        <Image Aspect="AspectFill" Source="subtle_prism.png" />
+        <ScrollView VerticalOptions="Fill">
+            <Grid MaximumWidthRequest="600" RowDefinitions="300, *">
+                <Grid
+                    Grid.Row="0"
+                    HorizontalOptions="Center"
+                    RowDefinitions=".6*, Auto"
+                    VerticalOptions="Center">
+                    <Image
+                        Margin="15,0,0,0"
+                        HorizontalOptions="Center"
+                        MaximumHeightRequest="{OnPlatform Android=150,
+                                                          WinUI=200}"
+                        Source="logo_stock.png" />
+                    <Label
+                        Grid.Row="2"
+                        Margin="0,-10,0,20"
+                        FontAttributes="Bold"
+                        FontFamily="bold"
+                        FontSize="25"
+                        HorizontalOptions="Center"
+                        Text="Stock Flow"
+                        TextColor="{StaticResource Gray200}" />
+                </Grid>
+                <Grid Grid.Row="1" StyleClass="Elevation3">
+                    <RoundRectangle
+                        Margin="-5,-30,-5,-2"
+                        CornerRadius="30,30,0,0"
+                        Fill="{AppThemeBinding Light={StaticResource LightBackground},
+                                               Dark={StaticResource Jet}}" />
+                    <VerticalStackLayout Margin="30,0,30,30">
+                        <Label
+                            FontAttributes="Bold"
+                            FontFamily="bold"
+                            FontSize="20"
+                            Text="Verify code"
+                            TextColor="{AppThemeBinding Light={StaticResource Jet},
+                                                        Dark={StaticResource GhostWhite}}" />
+                        <Label
+                            FontSize="14"
+                            Text="Please enter the code sent to "
+                            TextColor="{AppThemeBinding Light={StaticResource Jet},
+                                                        Dark={StaticResource GhostWhite}}" />
+                        <Label
+                            FontSize="14"
+                            Text="{Binding Email}"
+                            TextColor="{AppThemeBinding Light={StaticResource Charcoal},
+                                                        Dark={StaticResource BlueMunself}}" />
+                        <ActivityIndicator
+                            Margin="0,30,0,0"
+                            HorizontalOptions="Center"
+                            IsRunning="{Binding VerifyCodeCommand.IsRunning}"
+                            IsVisible="{Binding VerifyCodeCommand.IsRunning}"
+                            VerticalOptions="Center"
+                            Color="{StaticResource Charcoal}" />
+                        <input:FormView IsVisible="{Binding VerifyCodeCommand.IsRunning, Converter={toolkit:InvertedBoolConverter}}" SubmitCommand="{Binding VerifyCodeCommand}">
+                            <Grid
+                                Margin="0,30,0,20"
+                                ColumnSpacing="10"
+                                HorizontalOptions="Center">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Entry
+                                    x:Name="CodeEntry1"
+                                    Grid.Column="0"
+                                    Style="{StaticResource VerifyCodeEntryStyle}"
+                                    Text="{Binding FirstDigit}"
+                                    TextChanged="OnCodeEntryTextChanged"
+                                    TextColor="{AppThemeBinding Light={StaticResource Charcoal},
+                                                                Dark={StaticResource Gray300}}" />
+                                <Entry
+                                    x:Name="CodeEntry2"
+                                    Grid.Column="1"
+                                    Style="{StaticResource VerifyCodeEntryStyle}"
+                                    Text="{Binding SecondDigit}"
+                                    TextChanged="OnCodeEntryTextChanged"
+                                    TextColor="{AppThemeBinding Light={StaticResource Charcoal},
+                                                                Dark={StaticResource Gray300}}" />
+                                <Entry
+                                    x:Name="CodeEntry3"
+                                    Grid.Column="2"
+                                    Style="{StaticResource VerifyCodeEntryStyle}"
+                                    Text="{Binding ThirdDigit}"
+                                    TextChanged="OnCodeEntryTextChanged"
+                                    TextColor="{AppThemeBinding Light={StaticResource Charcoal},
+                                                                Dark={StaticResource Gray300}}" />
+                                <Entry
+                                    x:Name="CodeEntry4"
+                                    Grid.Column="3"
+                                    Style="{StaticResource VerifyCodeEntryStyle}"
+                                    Text="{Binding FourthDigit}"
+                                    TextChanged="OnCodeEntryTextChanged"
+                                    TextColor="{AppThemeBinding Light={StaticResource Charcoal},
+                                                                Dark={StaticResource Gray300}}" />
+                                <Entry
+                                    x:Name="CodeEntry5"
+                                    Grid.Column="4"
+                                    Style="{StaticResource VerifyCodeEntryStyle}"
+                                    Text="{Binding FifthDigit}"
+                                    TextChanged="OnCodeEntryTextChanged"
+                                    TextColor="{AppThemeBinding Light={StaticResource Charcoal},
+                                                                Dark={StaticResource Gray300}}" />
+                                <Entry
+                                    x:Name="CodeEntry6"
+                                    Grid.Column="5"
+                                    Style="{StaticResource VerifyCodeEntryStyle}"
+                                    Text="{Binding SixthDigit}"
+                                    TextChanged="OnCodeEntryTextChanged"
+                                    TextColor="{AppThemeBinding Light={StaticResource Charcoal},
+                                                                Dark={StaticResource Gray300}}" />
+                            </Grid>
+                            <Button
+                                Margin="0,20,0,0"
+                                input:FormView.IsSubmitButton="True"
+                                BackgroundColor="{StaticResource Charcoal}"
+                                IsEnabled="{Binding CanVerifyCode}"
+                                StyleClass="FilledButton"
+                                Text="Send"
+                                TextColor="{StaticResource GhostWhite}" />
+                        </input:FormView>
+                        <BoxView
+                            Margin="0,20,0,20"
+                            BackgroundColor="{StaticResource Gray200}"
+                            HeightRequest="1"
+                            VerticalOptions="Center" />
+                        <HorizontalStackLayout
+                            Margin="0,10,0,10"
+                            HorizontalOptions="Center"
+                            Spacing="5">
+                            <Image>
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialRegular"
+                                        Glyph="{x:Static m:MaterialRegular.Arrow_back}"
+                                        Size="20"
+                                        Color="{AppThemeBinding Light={StaticResource Cerulean},
+                                                                Dark={StaticResource BlueMunself}}" />
+                                </Image.Source>
+                            </Image>
+                            <Label
+                                FontAttributes="Bold"
+                                FontFamily="bold"
+                                HorizontalOptions="Center"
+                                Text="Back to forgot password"
+                                TextColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                            Dark={StaticResource BlueMunself}}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding BackToForgotPasswordNavigationCommand}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Grid>
+            </Grid>
+        </ScrollView>
+    </Grid>
+</base:SfContentPage>

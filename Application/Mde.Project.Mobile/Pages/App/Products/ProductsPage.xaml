@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Products.ProductsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:controls="clr-namespace:Mde.Project.Mobile.Controls"
+    xmlns:converters="clr-namespace:Mde.Project.Mobile.Converters"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:products="clr-namespace:Mde.Project.Mobile.Models.Products"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:Mde.Project.Mobile.ViewModels.App.Products"
+    Title="Products"
+    x:DataType="vm:ProductsViewModel">
+    <base:SfContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding InitializeProductsCommand}" EventName="Appearing" />
+    </base:SfContentPage.Behaviors>
+    <base:SfContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding ProfileNavigationCommand}"
+            Order="Primary"
+            Priority="1">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Account_circle}"
+                    Color="{AppThemeBinding Light={StaticResource Charcoal},
+                                            Dark={StaticResource Warehouse}}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+        <controls:SfToolBarItem
+            Command="{Binding HomeNavigationCommand}"
+            IsVisible="{Binding IsAdmin}"
+            Order="Primary"
+            Priority="0">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialRegular"
+                    Glyph="{x:Static m:MaterialRegular.Home}"
+                    Color="{AppThemeBinding Light={StaticResource Charcoal},
+                                            Dark={StaticResource Warehouse}}" />
+            </ToolbarItem.IconImageSource>
+        </controls:SfToolBarItem>
+    </base:SfContentPage.ToolbarItems>
+    <Grid RowDefinitions="Auto, *, Auto">
+        <VerticalStackLayout Grid.Row="0" MaximumWidthRequest="900">
+            <Grid Margin="0,20,0,20" ColumnDefinitions="*,100">
+                <Border
+                    Grid.Column="0"
+                    Margin="20,0,5,0"
+                    Padding="0"
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                      Light={StaticResource LightBackground}}"
+                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                             Light={StaticResource Gray100}}"
+                    StrokeShape="RoundRectangle 10">
+                    <SearchBar
+                        HorizontalOptions="Fill"
+                        Placeholder="Search products"
+                        SearchCommand="{Binding FilterProductsCommand}"
+                        Text="{Binding Filter}"
+                        TextChanged="SearchBar_TextChanged"
+                        VerticalOptions="Center" />
+                </Border>
+                <Border
+                    Grid.Column="1"
+                    Margin="5,0,20,0"
+                    MaximumWidthRequest="100"
+                    Stroke="Transparent"
+                    StrokeShape="RoundRectangle 10">
+                    <material:ButtonView
+                        BackgroundColor="{StaticResource Charcoal}"
+                        Pressed="Filter_OnPressed"
+                        StrokeShape="RoundRectangle 10">
+                        <Image HeightRequest="20" WidthRequest="20">
+                            <Image.Source>
+                                <FontImageSource
+                                    FontFamily="MaterialRegular"
+                                    Glyph="{x:Static m:MaterialRegular.Tune}"
+                                    Color="{StaticResource GhostWhite}" />
+                            </Image.Source>
+                        </Image>
+                    </material:ButtonView>
+                </Border>
+            </Grid>
+            <BoxView Margin="20,0,20,0" StyleClass="Divider" />
+            <Grid Margin="20,10,20,10" ColumnDefinitions="*, Auto">
+                <HorizontalStackLayout Spacing="5">
+                    <Label
+                        FontAttributes="Bold"
+                        FontSize="20"
+                        HorizontalOptions="Start"
+                        Text="Product List"
+                        TextColor="{StaticResource Gray300}"
+                        VerticalOptions="Center" />
+                    <Border
+                        Padding="5,0,5,0"
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource LightJet},
+                                                          Light={StaticResource Gray200}}"
+                        HorizontalOptions="Center"
+                        IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"
+                        Stroke="{AppThemeBinding Dark={StaticResource Jet},
+                                                 Light={StaticResource Gray300}}"
+                        StrokeShape="RoundRectangle 10"
+                        VerticalOptions="Center">
+                        <Label
+                            FontSize="18"
+                            HorizontalOptions="Center"
+                            Text="{Binding TotalItems}"
+                            TextColor="{AppThemeBinding Dark={StaticResource Gray300},
+                                                        Light={StaticResource GhostWhite}}"
+                            VerticalOptions="Center" />
+                    </Border>
+                </HorizontalStackLayout>
+
+                <VerticalStackLayout
+                    Grid.Column="1"
+                    Margin="0,0,0,0"
+                    HorizontalOptions="End"
+                    VerticalOptions="Center">
+                    <material:ButtonView
+                        BackgroundColor="{StaticResource YellowGreen}"
+                        PressedCommand="{Binding ProductAddNavigationCommand}"
+                        StrokeShape="RoundRectangle 10">
+                        <Image HeightRequest="20" WidthRequest="20">
+                            <Image.Source>
+                                <FontImageSource
+                                    FontFamily="MaterialRegular"
+                                    Glyph="{x:Static m:MaterialRegular.Add}"
+                                    Color="{StaticResource GhostWhite}" />
+                            </Image.Source>
+                        </Image>
+                    </material:ButtonView>
+                </VerticalStackLayout>
+            </Grid>
+        </VerticalStackLayout>
+        <ActivityIndicator
+            Grid.Row="1"
+            HorizontalOptions="Center"
+            IsRunning="{Binding IsBusy}"
+            IsVisible="{Binding IsBusy}"
+            VerticalOptions="Center" />
+        <Label
+            Grid.Row="1"
+            HorizontalOptions="Center"
+            VerticalOptions="Center">
+            <Label.Text>
+                <MultiBinding Converter="{converters:BoolAndIntToStringConverter}">
+                    <Binding Path="IsBusy" />
+                    <Binding Path="Products.Count" />
+                </MultiBinding>
+            </Label.Text>
+        </Label>
+        <CollectionView
+            Grid.Row="1"
+            Margin="20,0,20,10"
+            IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"
+            ItemsSource="{Binding Products}"
+            VerticalOptions="Fill">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="5" Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="products:ProductItemDisplayModel">
+                    <Border
+                        BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                          Light={StaticResource LightBackground}}"
+                        MaximumWidthRequest="860"
+                        Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                                 Light={StaticResource Gray100}}"
+                        StrokeShape="RoundRectangle 10"
+                        StrokeThickness="1">
+                        <Grid
+                            Padding="10,10,10,10"
+                            ColumnDefinitions="100, *, 0.5*"
+                            ColumnSpacing="10"
+                            HeightRequest="125">
+                            <Border
+                                Grid.Column="0"
+                                BackgroundColor="Transparent"
+                                HeightRequest="100"
+                                Stroke="Transparent"
+                                StrokeShape="RoundRectangle 16"
+                                WidthRequest="100">
+                                <Image
+                                    Aspect="AspectFill"
+                                    HeightRequest="100"
+                                    Source="{Binding ImageSource}"
+                                    WidthRequest="100" />
+                            </Border>
+                            <VerticalStackLayout
+                                Grid.Column="1"
+                                Spacing="3"
+                                VerticalOptions="Center">
+                                <Label Text="{Binding Brand.Name}" TextColor="{StaticResource Gray300}" />
+                                <Label
+                                    FontSize="14"
+                                    Text="{Binding Name}"
+                                    TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                                                Light={StaticResource Jet}}" />
+                                <Border
+                                    Margin="0,5,0,0"
+                                    Padding="6,3"
+                                    BackgroundColor="{StaticResource FernGreen}"
+                                    HorizontalOptions="Start"
+                                    Stroke="{StaticResource FernGreen}"
+                                    StrokeShape="RoundRectangle 12">
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Image HeightRequest="14" WidthRequest="14">
+                                            <Image.Source>
+                                                <FontImageSource
+                                                    FontFamily="MaterialRegular"
+                                                    Glyph="{x:Static m:MaterialRegular.Category}"
+                                                    Color="White" />
+                                            </Image.Source>
+                                        </Image>
+                                        <Label
+                                            FontSize="14"
+                                            Text="{Binding Category.Name}"
+                                            TextColor="White"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Border>
+
+                            </VerticalStackLayout>
+                            <VerticalStackLayout
+                                Grid.Column="2"
+                                Margin="0,0,10,0"
+                                HorizontalOptions="End"
+                                VerticalOptions="Center">
+                                <material:ButtonView
+                                    BackgroundColor="{StaticResource Charcoal}"
+                                    CommandParameter="{Binding Id}"
+                                    PressedCommand="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.ProductDetailNavigationCommand}"
+                                    StrokeShape="RoundRectangle 10">
+                                    <Image HeightRequest="20" WidthRequest="20">
+                                        <Image.Source>
+                                            <FontImageSource
+                                                FontFamily="MaterialRegular"
+                                                Glyph="{x:Static m:MaterialRegular.Chevron_right}"
+                                                Color="{StaticResource GhostWhite}" />
+                                        </Image.Source>
+                                    </Image>
+                                </material:ButtonView>
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <material:Paginator
+            Grid.Row="2"
+            Margin="0,0,0,10"
+            ChangePageCommand="{Binding ChangeProductPageCommand}"
+            CurrentPage="{Binding CurrentPage}"
+            HorizontalOptions="Center"
+            StyleClass="TextButton"
+            TotalPageCount="{Binding TotalPages}" />
+    </Grid>
+</base:SfContentPage>

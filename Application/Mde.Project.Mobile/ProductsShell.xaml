@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Mde.Project.Mobile.ProductsShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:app="clr-namespace:Mde.Project.Mobile.Pages.App.Products"
+    xmlns:local="clr-namespace:Mde.Project.Mobile"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    Shell.FlyoutBehavior="Disabled">
+
+    <!--  Products Page  -->
+    <TabBar>
+        <ShellContent
+            Title="Products"
+            ContentTemplate="{DataTemplate app:ProductsPage}"
+            Icon="{FontImageSource FontFamily=MaterialRegular,
+                                   Glyph={x:Static m:MaterialRegular.Inventory}}" />
+        <ShellContent
+            Title="Categories"
+            ContentTemplate="{DataTemplate app:CategoriesPage}"
+            Icon="{FontImageSource FontFamily=MaterialRegular,
+                                   Glyph={x:Static m:MaterialRegular.Category}}" />
+        <ShellContent
+            Title="Brands"
+            ContentTemplate="{DataTemplate app:BrandsPage}"
+            Icon="{FontImageSource FontFamily=MaterialRegular,
+                                   Glyph={x:Static m:MaterialRegular.Work}}" />
+    </TabBar>
+</Shell>

@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Products.ProductUpsertPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:controls="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:products="clr-namespace:Mde.Project.Mobile.ViewModels.App.Products"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:validations="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    Title="{Binding Title}"
+    x:DataType="products:ProductUpsertViewModel">
+    <base:SfContentPage.Behaviors>
+        <toolkit:EventToCommandBehavior Command="{Binding InitializeProductCommand}" EventName="Loaded" />
+    </base:SfContentPage.Behaviors>
+    <ScrollView>
+        <Grid RowDefinitions="200,*">
+            <Grid
+                Grid.Row="0"
+                Margin="0,0,0,30"
+                HeightRequest="100"
+                WidthRequest="100">
+                <Border
+                    BackgroundColor="{AppThemeBinding Dark={StaticResource Jet},
+                                                      Light={StaticResource LightBackground}}"
+                    HorizontalOptions="Center"
+                    Stroke="{AppThemeBinding Dark={StaticResource LightJet},
+                                             Light={StaticResource Gray100}}"
+                    StrokeShape="RoundRectangle 50">
+                    <Image
+                        x:Name="ProductPicture"
+                        Aspect="AspectFill"
+                        Source="{Binding Product.Image}" />
+                </Border>
+                <Border
+                    HeightRequest="40"
+                    HorizontalOptions="End"
+                    Stroke="Transparent"
+                    StrokeShape="RoundRectangle 20"
+                    VerticalOptions="End"
+                    WidthRequest="40">
+                    <material:ButtonView
+                        BackgroundColor="{StaticResource FernGreen}"
+                        HeightRequest="40"
+                        PressedCommand="{Binding PickImageCommand}"
+                        WidthRequest="40">
+                        <Grid HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image HeightRequest="20" WidthRequest="20">
+                                <Image.Source>
+                                    <FontImageSource
+                                        FontFamily="MaterialRegular"
+                                        Glyph="{x:Static m:MaterialRegular.Upload}"
+                                        Size="20"
+                                        Color="{StaticResource GhostWhite}" />
+                                </Image.Source>
+                            </Image>
+                        </Grid>
+                    </material:ButtonView>
+                </Border>
+            </Grid>
+            <Grid
+                Grid.Row="1"
+                MaximumWidthRequest="900"
+                StyleClass="Elevation1">
+                <Border
+                    Margin="-5,-40,-5,-2"
+                    Stroke="Transparent"
+                    StrokeShape="RoundRectangle 30,30,0,0">
+                    <Grid>
+                        <RoundRectangle CornerRadius="30,30,0,0" Fill="{AppThemeBinding Dark={StaticResource Jet}, Light={StaticResource LightBackground}}" />
+                        <VerticalStackLayout Padding="20,20,20,50">
+                            <Label
+                                Margin="0,0,0,20"
+                                FontSize="18"
+                                HorizontalOptions="Center"
+                                TextColor="{StaticResource Gray300}">
+                                Product Info
+                            </Label>
+                            <ActivityIndicator
+                                HorizontalOptions="Center"
+                                IsRunning="{Binding IsBusy}"
+                                IsVisible="{Binding IsBusy}"
+                                VerticalOptions="Center" />
+                            <controls:FormView
+                                IsVisible="{Binding IsBusy, Converter={toolkit:InvertedBoolConverter}}"
+                                Spacing="10"
+                                SubmitCommand="{Binding UpsertProductCommand}">
+                                <material:TextField
+                                    Title="Product Name"
+                                    AccentColor="{AppThemeBinding Dark={StaticResource BlueMunself},
+                                                                  Light={StaticResource Cerulean}}"
+                                    Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                           Glyph={x:Static m:MaterialRegular.Info}}"
+                                    Text="{Binding Product.Name}">
+                                    <validations:RequiredValidation />
+                                </material:TextField>
+                                <material:EditorField
+                                    Title="Description"
+                                    AccentColor="{AppThemeBinding Dark={StaticResource BlueMunself},
+                                                                  Light={StaticResource Cerulean}}"
+                                    Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                           Glyph={x:Static m:MaterialRegular.Description}}"
+                                    Text="{Binding Product.Description}" />
+                                <material:TextField
+                                    Title="Price"
+                                    AccentColor="{AppThemeBinding Dark={StaticResource BlueMunself},
+                                                                  Light={StaticResource Cerulean}}"
+                                    Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                           Glyph={x:Static m:MaterialRegular.Payments}}"
+                                    Keyboard="Numeric"
+                                    Text="{Binding Product.SalesPrice}">
+                                    <validations:RequiredValidation />
+                                </material:TextField>
+                                <material:PickerField
+                                    Title="Select Taxrate"
+                                    AccentColor="{AppThemeBinding Dark={StaticResource BlueMunself},
+                                                                  Light={StaticResource Cerulean}}"
+                                    Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                           Glyph={x:Static m:MaterialRegular.Sell}}"
+                                    ItemDisplayBinding="{Binding Name}"
+                                    ItemsSource="{Binding Taxes}"
+                                    SelectedItem="{Binding SelectedTax}">
+                                    <validations:RequiredValidation />
+                                </material:PickerField>
+                                <material:PickerField
+                                    Title="Select Category"
+                                    AccentColor="{AppThemeBinding Dark={StaticResource BlueMunself},
+                                                                  Light={StaticResource Cerulean}}"
+                                    Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                           Glyph={x:Static m:MaterialRegular.Category}}"
+                                    ItemDisplayBinding="{Binding Name}"
+                                    ItemsSource="{Binding Categories}"
+                                    SelectedItem="{Binding SelectedCategory}">
+                                    <validations:RequiredValidation />
+                                </material:PickerField>
+                                <material:PickerField
+                                    Title="Select Brand"
+                                    AccentColor="{AppThemeBinding Dark={StaticResource BlueMunself},
+                                                                  Light={StaticResource Cerulean}}"
+                                    Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                           Glyph={x:Static m:MaterialRegular.Work}}"
+                                    ItemDisplayBinding="{Binding Name}"
+                                    ItemsSource="{Binding Brands}"
+                                    SelectedItem="{Binding SelectedBrand}">
+                                    <validations:RequiredValidation />
+                                </material:PickerField>
+                                <material:ButtonView
+                                    Margin="0,10,0,0"
+                                    controls:FormView.IsSubmitButton="True"
+                                    BackgroundColor="{StaticResource FernGreen}"
+                                    StyleClass="FilledButton">
+                                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="5">
+                                        <Image
+                                            Aspect="AspectFit"
+                                            HeightRequest="20"
+                                            Source="{FontImageSource FontFamily=MaterialRegular,
+                                                                     Glyph={x:Static m:MaterialRegular.Save}}"
+                                            VerticalOptions="Center"
+                                            WidthRequest="20" />
+                                        <Label
+                                            FontAttributes="Bold"
+                                            Text="{Binding Title}"
+                                            TextColor="GhostWhite"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </material:ButtonView>
+                            </controls:FormView>
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </ScrollView>
+</base:SfContentPage>

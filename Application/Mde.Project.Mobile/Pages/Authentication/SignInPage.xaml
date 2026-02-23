@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:SfContentPage
+    x:Class="Mde.Project.Mobile.Pages.Authentication.SignInPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:Mde.Project.Mobile.Controls.Base"
+    xmlns:converters="clr-namespace:Mde.Project.Mobile.Converters"
+    xmlns:fa="clr-namespace:UraniumUI.Icons.FontAwesome;assembly=UraniumUI.Icons.FontAwesome"
+    xmlns:input="clr-namespace:InputKit.Shared.Controls;assembly=InputKit.Maui"
+    xmlns:m="clr-namespace:UraniumUI.Icons.MaterialIcons;assembly=UraniumUI.Icons.MaterialIcons"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:validation="clr-namespace:InputKit.Shared.Validations;assembly=InputKit.Maui"
+    xmlns:vm="clr-namespace:Mde.Project.Mobile.ViewModels.Authentication"
+    x:DataType="vm:SignInViewModel"
+    NavigationPage.HasNavigationBar="False">
+    <Grid BackgroundColor="{StaticResource Warehouse}">
+        <Image
+            Grid.Row="0"
+            Aspect="AspectFill"
+            Source="subtle_prism.png" />
+        <ScrollView VerticalOptions="Fill">
+            <Grid MaximumWidthRequest="600" RowDefinitions="300, *">
+                <Grid
+                    Grid.Row="0"
+                    HorizontalOptions="Center"
+                    RowDefinitions=".6*, Auto"
+                    VerticalOptions="Center">
+                    <Image
+                        Margin="15,0,0,0"
+                        HorizontalOptions="Center"
+                        MaximumHeightRequest="{OnPlatform Android=150,
+                                                          WinUI=200}"
+                        Source="logo_stock.png" />
+                    <Label
+                        Grid.Row="2"
+                        Margin="0,-10,0,20"
+                        FontAttributes="Bold"
+                        FontFamily="bold"
+                        FontSize="25"
+                        HorizontalOptions="Center"
+                        Text="Stock Flow"
+                        TextColor="{StaticResource Gray200}" />
+                </Grid>
+                <Grid Grid.Row="1" StyleClass="Elevation3">
+                    <RoundRectangle
+                        Margin="-5,-30,-5,-2"
+                        CornerRadius="30,30,0,0"
+                        Fill="{AppThemeBinding Light={StaticResource LightBackground},
+                                               Dark={StaticResource Jet}}" />
+                    <VerticalStackLayout Margin="30,0,30,0">
+                        <Label
+                            FontAttributes="Bold"
+                            FontFamily="bold"
+                            FontSize="20"
+                            Text="Sign in"
+                            TextColor="{AppThemeBinding Light={StaticResource Jet},
+                                                        Dark={StaticResource GhostWhite}}" />
+                        <HorizontalStackLayout Spacing="5">
+                            <Label
+                                FontSize="14"
+                                Text="Don't have an account?"
+                                TextColor="{AppThemeBinding Light={StaticResource Jet},
+                                                            Dark={StaticResource GhostWhite}}" />
+                            <Label
+                                FontAttributes="Bold"
+                                FontFamily="bold"
+                                FontSize="14"
+                                Text="Sign up"
+                                TextColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                            Dark={StaticResource BlueMunself}}"
+                                VerticalOptions="Center">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SignUpNavigationCommand}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                        </HorizontalStackLayout>
+                        <ActivityIndicator
+                            Margin="0,30,0,0"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center">
+                            <ActivityIndicator.IsRunning>
+                                <MultiBinding Converter="{converters:AnyCommandRunningConverter}">
+                                    <Binding Path="SignInCommand.IsRunning" />
+                                    <Binding Path="MicrosoftSignInCommand.IsRunning" />
+                                    <Binding Path="GoogleSignInCommand.IsRunning" />
+                                </MultiBinding>
+                            </ActivityIndicator.IsRunning>
+                            <ActivityIndicator.IsVisible>
+                                <MultiBinding Converter="{converters:AnyCommandRunningConverter}">
+                                    <Binding Path="SignInCommand.IsRunning" />
+                                    <Binding Path="MicrosoftSignInCommand.IsRunning" />
+                                    <Binding Path="GoogleSignInCommand.IsRunning" />
+                                </MultiBinding>
+                            </ActivityIndicator.IsVisible>
+                        </ActivityIndicator>
+                        <input:FormView SubmitCommand="{Binding SignInCommand}">
+                            <input:FormView.IsVisible>
+                                <MultiBinding Converter="{converters:NoneCommandRunningConverter}">
+                                    <Binding Path="SignInCommand.IsRunning" />
+                                    <Binding Path="MicrosoftSignInCommand.IsRunning" />
+                                    <Binding Path="GoogleSignInCommand.IsRunning" />
+                                </MultiBinding>
+                            </input:FormView.IsVisible>
+                            <VerticalStackLayout Margin="0,20,0,0" Spacing="20">
+                                <material:TextField
+                                    Title="E-mail"
+                                    AccentColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                                  Dark={StaticResource BlueMunself}}"
+                                    Icon="{FontImageSource FontFamily=MaterialRegular,
+                                                           Glyph={x:Static m:MaterialRegular.Email}}"
+                                    Text="{Binding Email}">
+                                    <validation:RequiredValidation />
+                                    <validation:RegexValidation Message="Please type a valid e-mail address." Pattern="{x:Static input:AdvancedEntry.REGEX_EMAIL}" />
+                                </material:TextField>
+                                <material:TextField
+                                    Title="Enter your password"
+                                    AccentColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                                  Dark={StaticResource BlueMunself}}"
+                                    Icon="{FontImageSource FontFamily=FASolid,
+                                                           Glyph={x:Static fa:Solid.Lock}}"
+                                    IsPassword="True"
+                                    Text="{Binding Password}" />
+                            </VerticalStackLayout>
+                            <Label
+                                Margin="0,10,0,10"
+                                FontAttributes="Bold"
+                                FontFamily="bold"
+                                Text="Forgot your password?"
+                                TextColor="{AppThemeBinding Light={StaticResource Cerulean},
+                                                            Dark={StaticResource BlueMunself}}">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding ForgotPasswordNavigationCommand}" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Button
+                                Margin="0,20,0,0"
+                                input:FormView.IsSubmitButton="True"
+                                BackgroundColor="{StaticResource Charcoal}"
+                                IsEnabled="{Binding CanExecuteAction}"
+                                StyleClass="FilledButton"
+                                Text="Sign in"
+                                TextColor="{StaticResource GhostWhite}" />
+                        </input:FormView>
+                        <Grid
+                            Margin="0,30,0,0"
+                            ColumnDefinitions="*,Auto,*"
+                            VerticalOptions="Center">
+                            <BoxView
+                                Grid.Column="0"
+                                BackgroundColor="{StaticResource Gray200}"
+                                HeightRequest="1"
+                                VerticalOptions="Center" />
+                            <Label
+                                Grid.Column="1"
+                                Margin="10,0"
+                                FontAttributes="Bold"
+                                FontFamily="bold"
+                                FontSize="18"
+                                HorizontalOptions="Center"
+                                Text="OR"
+                                TextColor="{AppThemeBinding Light={StaticResource Gray600},
+                                                            Dark={StaticResource Gray100}}" />
+                            <BoxView
+                                Grid.Column="2"
+                                BackgroundColor="{StaticResource Gray200}"
+                                HeightRequest="1"
+                                VerticalOptions="Center" />
+                        </Grid>
+                        <VerticalStackLayout Margin="0,30,0,30" Spacing="10">
+                            <material:ButtonView BackgroundColor="{StaticResource Charcoal}" PressedCommand="{Binding MicrosoftSignInCommand}">
+                                <material:ButtonView.IsEnabled>
+                                    <MultiBinding Converter="{converters:NoneCommandRunningConverter}">
+                                        <Binding Path="SignInCommand.IsRunning" />
+                                        <Binding Path="MicrosoftSignInCommand.IsRunning" />
+                                        <Binding Path="GoogleSignInCommand.IsRunning" />
+                                    </MultiBinding>
+                                </material:ButtonView.IsEnabled>
+                                <Grid
+                                    Padding="1"
+                                    HorizontalOptions="Fill"
+                                    VerticalOptions="Center">
+                                    <HorizontalStackLayout HorizontalOptions="Start" Spacing="10">
+                                        <Border
+                                            Padding="3"
+                                            BackgroundColor="{StaticResource GhostWhite}"
+                                            Stroke="Transparent"
+                                            StrokeShape="RoundRectangle 5"
+                                            VerticalOptions="Center">
+                                            <Image
+                                                HeightRequest="24"
+                                                Source="microsoft_icon.png"
+                                                WidthRequest="24" />
+                                        </Border>
+                                        <Label
+                                            Text="Sign in with Microsoft"
+                                            TextColor="{StaticResource GhostWhite}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </material:ButtonView>
+                            <material:ButtonView BackgroundColor="{StaticResource Charcoal}" PressedCommand="{Binding GoogleSignInCommand}">
+                                <material:ButtonView.IsEnabled>
+                                    <MultiBinding Converter="{converters:NoneCommandRunningConverter}">
+                                        <Binding Path="SignInCommand.IsRunning" />
+                                        <Binding Path="MicrosoftSignInCommand.IsRunning" />
+                                        <Binding Path="GoogleSignInCommand.IsRunning" />
+                                    </MultiBinding>
+                                </material:ButtonView.IsEnabled>
+                                <Grid HorizontalOptions="Fill" VerticalOptions="Center">
+                                    <HorizontalStackLayout HorizontalOptions="Start" Spacing="10">
+                                        <Border
+                                            Padding="5"
+                                            BackgroundColor="{StaticResource GhostWhite}"
+                                            Stroke="Transparent"
+                                            StrokeShape="RoundRectangle 5"
+                                            VerticalOptions="Center">
+                                            <Image
+                                                HeightRequest="20"
+                                                Source="google_icon.png"
+                                                WidthRequest="20" />
+                                        </Border>
+                                        <Label
+                                            Text="Sign in with Google"
+                                            TextColor="{StaticResource GhostWhite}"
+                                            VerticalOptions="Center" />
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </material:ButtonView>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Grid>
+            </Grid>
+        </ScrollView>
+    </Grid>
+</base:SfContentPage>

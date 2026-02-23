@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Mde.Project.Mobile.Pages.App.Scanner.ScanProductPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
+    xmlns:controls1="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
+    NavigationPage.HasNavigationBar="False"
+    Shell.PresentationMode="Modal">
+    <Grid RowDefinitions="*,70">
+        <controls:CameraBarcodeReaderView
+            x:Name="CameraBarcodeReaderView"
+            Grid.RowSpan="3"
+            BarcodesDetected="BarcodesDetected"
+            IsDetecting="True" />
+
+        <VerticalStackLayout Grid.Row="0" VerticalOptions="Center">
+            <Label
+                FontAttributes="Bold"
+                FontSize="35"
+                HorizontalOptions="Center"
+                Text="Scan Barcode"
+                TextColor="White"
+                VerticalOptions="Start" />
+            <Label
+                FontSize="18"
+                HorizontalOptions="Center"
+                Text="Align the barcode within"
+                TextColor="White"
+                VerticalOptions="Start" />
+            <Label
+                FontSize="18"
+                HorizontalOptions="Center"
+                Text="the frame to scan."
+                TextColor="White"
+                VerticalOptions="Start" />
+            <controls1:SKLottieView
+                HeightRequest="400"
+                RepeatCount="-1"
+                Source="scanner_overlay.json" />
+        </VerticalStackLayout>
+
+        <Border
+            Grid.Row="1"
+            Margin="-5,-10,-5,-2"
+            Stroke="Transparent"
+            StrokeShape="RoundRectangle 30,30,0,0">
+            <Grid>
+                <RoundRectangle CornerRadius="30,30,0,0" Fill="#30000000" />
+                <Button
+                    BackgroundColor="{StaticResource Charcoal}"
+                    Pressed="Return_OnPressed"
+                    StyleClass="FilledButton"
+                    Text="Return"
+                    TextColor="{StaticResource GhostWhite}"
+                    WidthRequest="200" />
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>

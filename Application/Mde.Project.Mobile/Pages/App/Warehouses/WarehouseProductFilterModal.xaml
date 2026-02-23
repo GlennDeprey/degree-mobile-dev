@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup
+    x:Class="Mde.Project.Mobile.Pages.App.Warehouses.WarehouseProductFilterModal"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:m="http://schemas.enisn-projects.io/dotnet/maui/uraniumui"
+    xmlns:material="http://schemas.enisn-projects.io/dotnet/maui/uraniumui/material"
+    xmlns:products="clr-namespace:Mde.Project.Mobile.ViewModels.App.Products"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:DataType="products:ProductsViewModel"
+    Color="{AppThemeBinding Dark={StaticResource Jet},
+                            Light={StaticResource LightBackground}}">
+    <VerticalStackLayout
+        Padding="20"
+        HeightRequest="300"
+        Spacing="20"
+        WidthRequest="300">
+        <Grid ColumnDefinitions="*, Auto">
+            <Label
+                FontAttributes="Bold"
+                FontSize="20"
+                HorizontalOptions="Start"
+                Text="Filter Products"
+                TextColor="{AppThemeBinding Dark={StaticResource Gray100},
+                                            Light={StaticResource Charcoal}}" />
+            <Button
+                Grid.Column="1"
+                Margin="0,-5,0,0"
+                Padding="0"
+                BackgroundColor="Transparent"
+                HorizontalOptions="End"
+                Pressed="Button_OnPressed">
+                <Button.ImageSource>
+                    <FontImageSource
+                        FontFamily="MaterialRegular"
+                        Glyph="{x:Static m:MaterialRegular.Close}"
+                        Color="{StaticResource Gray300}" />
+                </Button.ImageSource>
+            </Button>
+        </Grid>
+
+        <material:PickerField
+            Title="Select Category"
+            AccentColor="{AppThemeBinding Dark={StaticResource BlueMunself},
+                                          Light={StaticResource Cerulean}}"
+            ItemDisplayBinding="{Binding Name}"
+            ItemsSource="{Binding Categories}"
+            SelectedItem="{Binding SelectedCategory}" />
+        <material:PickerField
+            Title="Select Brand"
+            AccentColor="{AppThemeBinding Dark={StaticResource BlueMunself},
+                                          Light={StaticResource Cerulean}}"
+            ItemDisplayBinding="{Binding Name}"
+            ItemsSource="{Binding Brands}"
+            SelectedItem="{Binding SelectedBrand}" />
+        <Button
+            BackgroundColor="{StaticResource Charcoal}"
+            Command="{Binding FilterProductsCommand}"
+            StyleClass="FilledButton"
+            Text="Apply Filters"
+            TextColor="{StaticResource GhostWhite}" />
+    </VerticalStackLayout>
+</toolkit:Popup>
