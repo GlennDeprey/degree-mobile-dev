@@ -21,6 +21,6 @@ namespace Mde.Project.Mobile.Core
         public const string DefaultImage = "defaultimage.png";
 
         // Should be a secret key
-        public const string GoogleApiKey = "AIzaSyCEj8ZDoe3mkQVJrXs24zUhhfzBVd9qzFI";
+        public const string GoogleApiKey = "";
     }
 }
