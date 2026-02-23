@@ -1,5 +1,5 @@
 # Stock Flow
 
-## Project Demonstation
+## Project Demonstration
 
 www.reddit.com/r/dotnetMAUI/comments/1kwrkjp/endassignment_maui/
